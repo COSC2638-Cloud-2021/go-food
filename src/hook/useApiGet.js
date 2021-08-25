@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import api from '../api/api'
 
-export default function useApi({ endpoint, defaultValue = null }) {
+export default function useApiGet({ endpoint, defaultValue = null }) {
     const [data, setData] = useState(defaultValue)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(true)
