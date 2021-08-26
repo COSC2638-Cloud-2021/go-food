@@ -6,7 +6,8 @@ import {
     Container,
     Row,
     Col,
-    InputGroup
+    InputGroup,
+    Navbar
 } from "react-bootstrap";
 
 // export default function MainAppBar() {
@@ -21,6 +22,7 @@ import {
 //         </Flex >
 //     )
 // }
+
 export default function MainAppBar() {
     return (
         <Container className="mt-2" bg="light" variant="light">

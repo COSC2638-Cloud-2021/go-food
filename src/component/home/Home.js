@@ -10,8 +10,7 @@ import {
     Col,
     Badge, 
     InputGroup,
-    Dropdown,
-    DropdownButton
+    NavDropdown,
 } from "react-bootstrap";
 
 
@@ -28,46 +27,31 @@ export default function Home() {
 
 function Menu(){
     return (
-        <Navbar bg="light" variant="light">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home"><b>GoFood</b></Navbar.Brand>
-                {/* <Nav className="me-auto"> */}
-                <Nav.Link href="#home">Home</Nav.Link>
-                {/* <Nav.Link href="#features">Features</Nav.Link>
-                <Nav.Link href="#pricing">Pricing</Nav.Link> */}
-                <Row>
-                    <Col>
-                    </Col>
-                </Row>
-                <InputGroup className="">
-                    <DropdownButton
-                    variant="outline-secondary"
-                    title="Dropdown"
-                    id="input-group-dropdown-1"
-                    >
-                    <Dropdown.Item href="#">Action</Dropdown.Item>
-                    <Dropdown.Item href="#">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#">Something else here</Dropdown.Item>
-                    <Dropdown.Divider />
-                    <Dropdown.Item href="#">Separated link</Dropdown.Item>
-                    </DropdownButton>
-                    <FormControl aria-label="Text input with dropdown button" />
-                </InputGroup>
-                
-                {/* <Form className="d-flex">
-                    <FormControl
-                        type="search"
-                        placeholder="Search"
-                        className="mr-2"
-                        aria-label="Search"
-                    />
-                    
-                </Form> */}
-                {/* </Nav> */}
-                <Nav.Link href="#signin">Sign in</Nav.Link>
-                <Nav.Link href="#login">Log in</Nav.Link>
+            <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="me-auto">
+                <Nav.Link href="#features">Features</Nav.Link>
+                <Nav.Link href="#pricing">Pricing</Nav.Link>
+                <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                </NavDropdown>
+                </Nav>
+                <Nav>
+                <Nav.Link href="#deets">More deets</Nav.Link>
+                <Nav.Link eventKey={2} href="#memes">
+                    Dank memes
+                </Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
             </Container>
-        </Navbar>
+            </Navbar>
     )
 }
 function Menu1(){
@@ -118,31 +102,31 @@ function VendorDisplay(){
     return(
         <Container>
             <Row xs={1} md={3} className="g-4">
-            {Array.from({ length: 10 }).map((_, idx) => ( //Define 'length' later
-                <Col>
-                <Card style={{ width: '26rem' }} >
-                    <Card.Img variant="top" src="holder.js/100px160" />
-                    <Card.ImgOverlay>
-                        <Badge bg="secondary">Promotion</Badge>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <br></br>
-                        <Badge  bg="primary" variant="dark">75% OFF</Badge>
-                    </Card.ImgOverlay>
-                    <Card.Body>
-                        <Row>
-                            <Col md={6}><Card.Title>RestaurantName</Card.Title></Col>
-                            <Col md={{ span: 1, offset: 4 }}><Badge  bg="success" variant="light">3.8*</Badge></Col>
-                        </Row>
-                        <Card.Text>
-                            This content is a little bit longer.
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                </Col>
-            ))}
-        </Row>
+                {Array.from({ length: 10 }).map((_, idx) => ( //Define 'length' later
+                    <Col>
+                    <Card style={{ width: '26rem' }} >
+                        <Card.Img variant="top" src="holder.js/100px160" />
+                        <Card.ImgOverlay>
+                            <Badge bg="secondary">Promotion</Badge>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <Badge  bg="primary" variant="dark">75% OFF</Badge>
+                        </Card.ImgOverlay>
+                        <Card.Body>
+                            <Row>
+                                <Col md={6}><Card.Title>RestaurantName</Card.Title></Col>
+                                <Col md={{ span: 1, offset: 4 }}><Badge  bg="success" variant="light">3.8*</Badge></Col>
+                            </Row>
+                            <Card.Text>
+                                This content is a little bit longer.
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                    </Col>
+                ))}
+            </Row>
         </Container>
         
     )
