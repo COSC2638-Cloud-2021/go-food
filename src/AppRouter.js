@@ -6,6 +6,7 @@ import LoginPage from "./component/login/LoginPage"
 import SignUpPage from "./component/login/SignUpPage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
+import StorePage from "./component/store/StorePage"
 
 export default function AppRouter() {
     return (
@@ -23,7 +24,13 @@ export default function AppRouter() {
                         <Route exact path='/signup'>
                             <SignUpPage />
                         </Route>
+                        <Route exact path='/stores/:id'>
+                            <StorePage />
+                        </Route>
                         <Route exact path='/checkout'>
+                            <Checkout />
+                        </Route>
+                        <Route exact path='/stores/:id/checkout'>
                             <Checkout />
                         </Route>
                         <Route>
