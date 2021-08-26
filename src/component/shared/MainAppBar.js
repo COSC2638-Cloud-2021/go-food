@@ -1,7 +1,6 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import { Box, Flex, Input, InputGroup, InputLeftElement, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-
 export default function MainAppBar() {
     return (
         <Flex py={2} px={8} align='center'>

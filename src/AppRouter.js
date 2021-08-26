@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
+import Checkout from "./component/checkout/Checkout"
 import Home from "./component/home/Home"
 import LoginPage from "./component/login/LoginPage"
 import SignUpPage from "./component/login/SignUpPage"
@@ -21,6 +22,9 @@ export default function AppRouter() {
                         </Route>
                         <Route exact path='/signup'>
                             <SignUpPage />
+                        </Route>
+                        <Route exact path='/checkout'>
+                            <Checkout />
                         </Route>
                         <Route>
                             <Error404Page />
