@@ -19,6 +19,7 @@
 
 .COsection_sendOrderButton
 {
+    width: 100%;
     color:#999999;
     background-color: #cccccc;
     font-size: 20px;
@@ -35,3 +36,9 @@
     color:#cccccc;
     background-color: white;
 }
+
+/* @media screen and (min-width: 801px)  {
+    .item{
+        width: 5rem;
+    }
+} */

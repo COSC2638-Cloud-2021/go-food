@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid'
+import logo from '../../asset/image/logo.png'
 import { 
     Button,
     ButtonGroup,
@@ -22,6 +23,21 @@ export default function Checkout() {
         </Container>
     )
 }
+// const responsive = {
+//     superLargeDesktop: {
+//         // the naming can be any, depends on you.
+//         breakpoint: { max: 4000, min: 3000 }
+//     },
+//     desktop: {
+//         breakpoint: { max: 3000, min: 1024 }
+//     },
+//     tablet: {
+//         breakpoint: { max: 1024, min: 464 }
+//     },
+//     mobile: {
+//         breakpoint: { max: 464, min: 0 }
+//     }
+// };
 
 function Header() {
     return (
@@ -35,7 +51,7 @@ function Header() {
 function Body() {
     return (
         <Row className="mt-4 mb-4">
-            <Col className="mt-2 mb-4" lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
+            <Col className="mt-2 mb-4" xs={11} lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
                 <Row style={{borderBottom:" ", padding:"10px 10px", border:""}}>
                     <Col lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
                     <Col lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
@@ -43,10 +59,8 @@ function Body() {
                 <Row ><ItemList/></Row>
                 <Row ><Subtotal/></Row>
                 <Row><DeliveryAddress/></Row>
-
             </Col>
-            <Col xs={4}><TotalPayment/></Col>
-            
+            <Col xs={12} md={3}><TotalPayment/></Col>
         </Row>
     )
 }
@@ -57,7 +71,7 @@ function TotalPayment() {
             <Row className="mb-4">
                 <Col md={6} style={{ fontSize: "30px", fontWeight: "bold"}}><h1>Total Payment</h1></Col>
             </Row>
-            <div style={{padding: "20px 20px", backgroundColor:""}}>
+            <Row style={{padding: "20px 20px", backgroundColor:""}}>
                 <div >
                     <Row style={{fontWeight: "bold"}} >
                         <Col xs={7}>Subtotal</Col>
@@ -90,26 +104,29 @@ function TotalPayment() {
                     </Row>
                 </div>
            
-            </div>
+            </Row>
         </div>  
     )
 }
+
+
 function ItemList(){
     return(
-        <Container style={{border:" ", padding:"20px 20px"}}>
-            <Row md={8} className="mt-4">
+        <Container  style={{border:" ", padding:"20px 20px"}}>
+            <Row xs={12} md={8} className="mt-4">
                 {Array.from({ length: 3 }).map((_, idx) => ( // 'length' depend on data
                     <Row className="mb-2">
-                        <Col xs={3} style={{border:" "}}>
-                            <Card style={{ width: '10rem', alignItems:"center"}} >
+                        <Col xs={2} xs={3} style={{border:" "}}>
+                            <Card style={{ width: '10rem'}} >
+                                {/* <Image fallbackSrc={logo} height={160} width='100%' objectFit='cover' /> */}
                                 <Card.Img variant="top" src="holder.js/160x130" />
                             </Card>
                         </Col>
-                        <Col xs={6} style={{border:"", padding:"10px 20px"}}>
+                        <Col xs={8} xs={6} style={{border:"", padding:"10px 20px"}}>
                             <Row style={{fontWeight:"bold"}}>Item Name</Row>
                             <Row style={{color:"#999999"}}>Item description. This content can be longer.</Row>
                         </Col>
-                        <Col style={{border:" ", textAlign:"right", fontWeight:"bold"}}>1x 18.00 VND</Col>
+                        <Col xs={2} xs={3} style={{border:" ", textAlign:"right", fontWeight:"bold"}}>1x 18.00 VND</Col>
                     </Row>
                 ))}
             </Row>
@@ -120,29 +137,28 @@ function ItemList(){
 function Subtotal() {
     return(
         <Container>
-            <Row md={8} className="mt-4">
+            <Row xs={12} md={8} className="mt-4" style={{borderTop:""}}>
                 <Row className="mb-2">
-                    <Col xs={3} style={{border:""}}>
+                   
+                    <Col xs={1} md={7} style={{border:""}}>
                     </Col>
-                    <Col xs={4} style={{border:"", padding:"10px 20px"}}>
-                    </Col>
-                    <Col style={{border:"", textAlign:"", fontWeight:"bold"}}>
-                         <Row style={{fontWeight: "bold"}} >
-                            <Col xs={7}>Subtotal</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
+                    <Col  md={5} xs={12} style={{borderTop:"1px solid #cccccc", textAlign:"", fontWeight:"bold", padding:"10px 20px"}}>
+                        <Row style={{fontWeight: "bold"}} >
+                            <Col xs={8} xs={5}>Subtotal</Col>
+                            <Col xs={6} xs={5} style={{textAlign:"right"}} >144 VND</Col>
                         </Row>
                         <Row style={{color:"grey"}} >
-                            <Col xs={7}>Delivery fee</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
+                            <Col xs={6} xs={5}>Delivery fee</Col>
+                            <Col xs={6} xs={5} style={{textAlign:"right"}} >144 VND</Col>
                         </Row>
                         <Row style={{color:"grey"}}>
-                            <Col xs={7}>Discount</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
+                            <Col xs={8} xs={5}>Discount</Col>
+                            <Col xs={4} xs={5} style={{textAlign:"right"}} >144 VND</Col>
                         </Row>
                         <br></br>
                         <Row style={{color:"grey"}}>
-                            <Col xs={7} style={{fontSize:"26px"}}>Total</Col>
-                            <Col xs={4} style={{textAlign:"right", fontSize:"20px"}} >144 VND</Col>
+                            <Col xs={9} xs={5} style={{fontSize:"26px"}}>Total</Col>
+                            <Col xs={8} xs={5} style={{textAlign:"right", fontSize:"20px"}} >144 VND</Col>
                         </Row>
                     </Col>
                 </Row>
@@ -153,8 +169,8 @@ function Subtotal() {
 
 function DeliveryAddress(){
     return(
-        <Container>
-            <h1 style={{fontWeight:"bold", fontSize:"20px"}}>Delivery information</h1>
+        <Container style={{borderTop:"1px solid #cccccc"}}>
+            <h1 className='mt-4' style={{fontWeight:"bold", fontSize:"20px"}}>Delivery information</h1>
             <div style={{padding:"10px 10px"}}>
                 {['Name', 'Phone', 'Address', 'Note',].map((value) => (
             <Form.Group as={Row} className="mb-3" controlId={`Form.ControlInput${value}`}>
