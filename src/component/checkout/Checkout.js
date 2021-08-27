@@ -16,7 +16,7 @@ import './Checkout.css';
 
 export default function Checkout() {
     return (
-        <Container className="mt-2">
+        <Container className="mt-2 mb-4">
             <Header/>
             <Body/>
         </Container>
@@ -35,7 +35,7 @@ function Header() {
 function Body() {
     return (
         <Row className="mt-4 mb-4">
-            <Col lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
+            <Col className="mt-2 mb-4" lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
                 <Row style={{borderBottom:" ", padding:"10px 10px", border:""}}>
                     <Col lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
                     <Col lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
