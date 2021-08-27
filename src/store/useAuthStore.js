@@ -1,10 +1,11 @@
 import create from 'zustand'
 import { persist } from "zustand/middleware"
 import api from '../api/api'
+import mockUser from '../mock/mockUser'
 
 const useAuthStore = create(persist(
   (set, get) => ({
-    user: null,
+    user: mockUser,
     login: async ({ username, password }) => {
 
     },
@@ -12,7 +13,7 @@ const useAuthStore = create(persist(
 
     },
     fetchCurrentUser: async () => {
-
+      set({ user: mockUser })
     },
     clearUser: () => {
 

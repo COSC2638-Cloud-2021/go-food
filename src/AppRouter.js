@@ -4,6 +4,7 @@ import Checkout from "./component/checkout/Checkout"
 import Home from "./component/home/Home"
 import LoginPage from "./component/login/LoginPage"
 import SignUpPage from "./component/login/SignUpPage"
+import ProfilePage from "./component/profile/ProfilePage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
@@ -32,6 +33,9 @@ export default function AppRouter() {
                         </Route>
                         <Route exact path='/stores/:id/checkout'>
                             <Checkout />
+                        </Route>
+                        <Route exact path='/profile'>
+                            <ProfilePage />
                         </Route>
                         <Route>
                             <Error404Page />
