@@ -53,8 +53,8 @@ function Body() {
         <Row className="mt-4 mb-4">
             <Col className="mt-2 mb-4" xs={11} lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
                 <Row style={{borderBottom:" ", padding:"10px 10px", border:""}}>
-                    <Col lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
-                    <Col lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
+                    <Col xs={6} lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
+                    <Col xs={6} lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
                 </Row>
                 <Row ><ItemList/></Row>
                 <Row ><Subtotal/></Row>
