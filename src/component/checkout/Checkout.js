@@ -7,7 +7,8 @@ import {
     Col, 
     Container,
     Image,
-    Badge, 
+    Badge,
+    Form,
     Row 
 } from "react-bootstrap";
 import 'holderjs';
@@ -41,6 +42,7 @@ function Body() {
                 </Row>
                 <Row ><ItemList/></Row>
                 <Row ><Subtotal/></Row>
+                <Row><DeliveryAddress/></Row>
 
             </Col>
             <Col xs={4}><TotalPayment/></Col>
@@ -145,6 +147,24 @@ function Subtotal() {
                     </Col>
                 </Row>
             </Row>
+        </Container>
+    )
+}
+
+function DeliveryAddress(){
+    return(
+        <Container>
+            <h1 style={{fontWeight:"bold", fontSize:"20px"}}>Delivery information</h1>
+            <div style={{padding:"10px 10px"}}>
+                {['Name', 'Phone', 'Address', 'Note',].map((value) => (
+            <Form.Group as={Row} className="mb-3" controlId={`Form.ControlInput${value}`}>
+                <Form.Label column sm="2">{value}</Form.Label>
+                <Col sm="8">
+                <Form.Control type={value === 'Note' ? 'textarea' : 'text'} placeholder={value} />
+                </Col>
+            </Form.Group>
+        ))}
+            </div>
         </Container>
     )
 }
