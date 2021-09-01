@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { API_ACCOUNT } from "./config"
+import { API_ACCOUNT } from "../../config"
 import axios from 'axios'
 
 
