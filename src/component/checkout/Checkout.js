@@ -23,21 +23,6 @@ export default function Checkout() {
         </Container>
     )
 }
-// const responsive = {
-//     superLargeDesktop: {
-//         // the naming can be any, depends on you.
-//         breakpoint: { max: 4000, min: 3000 }
-//     },
-//     desktop: {
-//         breakpoint: { max: 3000, min: 1024 }
-//     },
-//     tablet: {
-//         breakpoint: { max: 1024, min: 464 }
-//     },
-//     mobile: {
-//         breakpoint: { max: 464, min: 0 }
-//     }
-// };
 
 function Header() {
     return (
@@ -54,7 +39,7 @@ function Body() {
             <Col className="mt-2 mb-4" xs={11} lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
                 <Row style={{borderBottom:" ", padding:"10px 10px", border:""}}>
                     <Col xs={6} lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
-                    <Col xs={6} lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
+                    <Col xs={6} md={4} lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
                 </Row>
                 <Row ><ItemList/></Row>
                 <Row ><Subtotal/></Row>
@@ -116,7 +101,7 @@ function ItemList(){
             <Row xs={12} md={8} className="mt-4">
                 {Array.from({ length: 3 }).map((_, idx) => ( // 'length' depend on data
                     <Row className="mb-2">
-                        <Col xs={2} xs={3} style={{border:" "}}>
+                        <Col xs={3} sm={3} md={3} lg={3} style={{border:" "}}>
                             <Card style={{ width: '10rem'}} >
                                 {/* <Image fallbackSrc={logo} height={160} width='100%' objectFit='cover' /> */}
                                 <Card.Img variant="top" src="holder.js/160x130" />
@@ -124,7 +109,7 @@ function ItemList(){
                         </Col>
                         <Col xs={8} xs={6} style={{border:"", padding:"10px 20px"}}>
                             <Row style={{fontWeight:"bold"}}>Item Name</Row>
-                            <Row style={{color:"#999999"}}>Item description. This content can be longer.</Row>
+                            <Row style={{color:"#999999"}}>Item description. This content can be longer. This content can be longer. This content can be longer.</Row>
                         </Col>
                         <Col xs={2} xs={3} style={{border:" ", textAlign:"right", fontWeight:"bold"}}>1x 18.00 VND</Col>
                     </Row>

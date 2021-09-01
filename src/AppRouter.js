@@ -8,6 +8,7 @@ import ProfilePage from "./component/profile/ProfilePage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
+import Intergrate from "./component/test_intergrate/Intergrate"
 
 export default function AppRouter() {
     return (
@@ -36,6 +37,10 @@ export default function AppRouter() {
                         </Route>
                         <Route exact path='/profile'>
                             <ProfilePage />
+                        </Route>
+                        {/* This is test */}
+                        <Route exact path='/test_intergrate'>
+                            <Intergrate />
                         </Route>
                         <Route>
                             <Error404Page />
