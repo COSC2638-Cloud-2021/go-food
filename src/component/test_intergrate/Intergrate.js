@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { API_USER } from "./config"
+import { API_ACCOUNT } from "./config"
 import axios from 'axios'
+
+
 
 export default function Intergrate () {
     useEffect(() => {
-        axios.get('http://localhost:8080/accounts')
+        axios.get(API_ACCOUNT)
             .then(function (response) {
                 console.log(response); })
     }, [])
