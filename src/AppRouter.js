@@ -8,7 +8,7 @@ import ProfilePage from "./component/profile/ProfilePage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
-import Intergrate from "./component/test_intergrate/Intergrate"
+import Intergrate from "./component/test/Intergrate"
 
 export default function AppRouter() {
     return (
