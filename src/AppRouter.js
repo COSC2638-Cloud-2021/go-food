@@ -39,7 +39,7 @@ export default function AppRouter() {
                             <ProfilePage />
                         </Route>
                         {/* This is test */}
-                        <Route exact path='/test_intergrate'>
+                        <Route exact path='/test'>
                             <Intergrate />
                         </Route>
                         <Route>
