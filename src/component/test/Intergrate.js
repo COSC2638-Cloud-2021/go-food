@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export default function Intergrate () {
     useEffect(() => {
-        axios.get(API_ACCOUNT)
+        axios.get('ec2-13-229-242-111.ap-southeast-1.compute.amazonaws.com:8080/accounts')
             .then(function (response) {
                 console.log(response); })
     }, [])
