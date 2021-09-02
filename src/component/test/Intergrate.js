@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export default function Intergrate () {
     useEffect(() => {
-        axios.get('http://13.228.29.97:8080/accounts')
+        axios.get(API_ACCOUNT)
             .then(function (response) {
                 console.log(response); })
     }, [])
