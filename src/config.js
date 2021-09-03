@@ -1,5 +1,5 @@
 // const API_PATH = "http://localhost:" //for local test
-const API_PATH = "http://13.228.29.97:" //for deploy aws
+const API_PATH = "http://13.212.232.182:" //for deploy aws backend_ec2_ip
 
 const PORTS = {
     'accounts': '8080'
