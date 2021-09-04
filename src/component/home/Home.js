@@ -1,29 +1,63 @@
-import { Link } from 'react-router-dom';
-import logo from '../../asset/image/logo.png'
+import { StarIcon } from '@chakra-ui/icons';
+import { Image, Box, Flex, Text } from '@chakra-ui/react';
 import {
-    Navbar,
-    Nav,
-    FormControl,
-    Button,
-    Container,
-    Card,
-    Row,
-    Col,
-    Badge,
-    InputGroup,
-    NavDropdown,
+    Badge, Button, Card, Col, Container, Row
 } from "react-bootstrap";
-import { Image } from '@chakra-ui/react';
-
+import { Link } from 'react-router-dom';
+import logo from '../../asset/image/logo.png';
+import useApiGet from '../../hook/useApiGet';
+import LoadingSpinner from '../shared/LoadingSpinner';
 
 export default function Home() {
+    const { data: restaurants, loading, error } = useApiGet({ defaultValue: [], endpoint: '/restaurants' })
     return (
-        <div>
+        <Box>
             {/* <Menu/> */}
             {/* <Menu1/> */}
             <FilterItems />
-            <VendorDisplay />
-        </div>
+            {
+                loading ? <LoadingSpinner /> :
+                    <Container >
+                        <Row xs={1} md={3} className="g-4">
+                            {restaurants.map(({ id, name, address }) => (
+                                <Col key={id}>
+                                    <Card style={{ width: '26rem', }} >
+                                        <Link to={`stores/${id}`} style={{ textDecoration: 'none' }}>
+                                            <Box>
+                                                <Image fallbackSrc={logo} height={160} width='100%' objectFit='cover' />
+                                                <Card.ImgOverlay>
+                                                    <Badge bg="secondary">Promotion</Badge>
+                                                    <br></br>
+                                                    <br></br>
+                                                    <br></br>
+                                                    <br></br>
+                                                    <Badge bg="primary" variant="dark">20% OFF</Badge>
+                                                </Card.ImgOverlay>
+                                                <Card.Body>
+                                                    <Row>
+                                                        <Col md={6}><Card.Title>{name}</Card.Title></Col>
+                                                        <Col md={{ span: 1, offset: 4 }}>
+                                                            <Badge bg="success" variant="light">
+                                                                <Flex align='center'>
+                                                                    <Text mr={1}>5.0</Text>
+                                                                    <StarIcon boxSize={2.5} />
+                                                                </Flex>
+                                                            </Badge>
+                                                        </Col>
+                                                    </Row>
+                                                    <Card.Text>
+                                                        {address}
+                                                    </Card.Text>
+                                                </Card.Body>
+                                            </Box>
+                                        </Link>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Container >
+            }
+        </Box>
     )
 }
 
@@ -36,44 +70,5 @@ function FilterItems() {
                 <Button variant="outline-secondary">Great offer</Button>{'  '}
             </div>
         </Container>
-
-
-    )
-}
-
-function VendorDisplay() {
-    const id = 1;
-    return (
-        <Container >
-            <Row xs={1} md={3} className="g-4">
-                {Array.from({ length: 10 }).map((_, idx) => ( //Define 'length' later
-                    <Col>
-                        <Card style={{ width: '26rem', textDecoration: 'none' }} >
-                            <Link to={`stores/${id}`}>
-                                <Image fallbackSrc={logo} height={160} width='100%' objectFit='cover' />
-                                <Card.ImgOverlay>
-                                    <Badge bg="secondary">Promotion</Badge>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <br></br>
-                                    <Badge bg="primary" variant="dark">75% OFF</Badge>
-                                </Card.ImgOverlay>
-                                <Card.Body>
-                                    <Row>
-                                        <Col md={6}><Card.Title>RestaurantName</Card.Title></Col>
-                                        <Col md={{ span: 1, offset: 4 }}><Badge bg="success" variant="light">3.8*</Badge></Col>
-                                    </Row>
-                                    <Card.Text>
-                                        This content is a little bit longer.
-                                    </Card.Text>
-                                </Card.Body>
-                            </Link>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
-        </Container >
-
     )
 }

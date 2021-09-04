@@ -82,7 +82,7 @@ function UserEditForm({ onCancel }) {
 
 function UserInfo() {
     const user = useAuthStore(state => state.user)
-    const { id, name, phoneNumber, address, username, email, avatar } = user
+    const { id, name, phoneNumber, address, email, avatar } = user
     const { url: avatarUrl } = avatar || {}
     const [editMode, setEditMode] = useBoolean()
 
@@ -93,7 +93,6 @@ function UserInfo() {
             {editMode ? <UserEditForm onCancel={setEditMode.off} />
                 : (<Fragment>
                     <Text fontSize='2xl' fontWeight={600}>{name}</Text>
-                    <Text fontSize='md' mb={2}>{username}</Text>
                     <Flex my={1} align='center'>
                         <Icon as={PhoneIcon} mr={2} />
                         <Text>{phoneNumber}</Text>

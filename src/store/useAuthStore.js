@@ -1,23 +1,48 @@
 import create from 'zustand'
 import { persist } from "zustand/middleware"
 import api from '../api/api'
-import mockUser from '../mock/mockUser'
 
 const useAuthStore = create(persist(
   (set, get) => ({
-    user: mockUser,
-    login: async ({ username, password }) => {
-
+    user: null,
+    login: async ({ email, password }) => {
+      try {
+        const loginRes = await api.post('/auth/login', { email, password })
+        const accessToken = loginRes.data.accessToken
+        if (!accessToken) return
+      }
+      catch (e) {
+        console.log(e.response)
+      }
     },
     logout: async () => {
-
+      try {
+        await api.post('/auth/logout')
+        get().clearUser()
+      } catch (e) {
+        console.log(e.response)
+      }
     },
     fetchCurrentUser: async () => {
-      set({ user: mockUser })
+      try {
+        const res = await api.get('accounts/me')
+        const user = res.data
+        console.log(user)
+        if (!user) {
+          get().clearUser()
+          return
+        }
+        set({ user })
+        return get().user
+      } catch (e) {
+        console.log(e.response)
+        return null
+      }
     },
     clearUser: () => {
-
-    }
+      console.log('Clear user!')
+      set({ user: null })
+    },
   }),
   {
     name: "auth", // unique name

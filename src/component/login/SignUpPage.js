@@ -28,7 +28,7 @@ export default function SignUpPage() {
         }
         setSubmitting(true)
         try {
-            await api.post('/users', { name, email, phoneNumber, address, password })
+            await api.post('/accounts', { name, email, phoneNumber, address, password })
             successToast({
                 title: 'Register account successfully!',
             })
@@ -36,7 +36,7 @@ export default function SignUpPage() {
         catch (e) {
             errorToast({
                 title: 'Sign up failed!',
-                description: '',
+                description: e.response.data.message,
             })
         }
         finally {
@@ -70,7 +70,7 @@ export default function SignUpPage() {
                         <FormLabel>Password</FormLabel>
                         <Input type='password' value={password} onInput={onPasswordInput} required />
                     </FormControl>
-                    <FormControl id="address">
+                    <FormControl id="confirm-password">
                         <FormLabel>Confirm Password</FormLabel>
                         <Input type='password' value={confirmPassword} onInput={onConfirmPasswordInput} required />
                     </FormControl>

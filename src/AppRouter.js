@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react"
-import { BrowserRouter, Route, Switch } from "react-router-dom"
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom"
 import Checkout from "./component/checkout/Checkout"
 import Home from "./component/home/Home"
 import LoginPage from "./component/login/LoginPage"
@@ -8,8 +8,11 @@ import ProfilePage from "./component/profile/ProfilePage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
+import useApiGet from "./hook/useApiGet"
+import useAuthStore from "./store/useAuthStore"
 
 export default function AppRouter() {
+    const user = useAuthStore(s => s.user)
     return (
         <BrowserRouter>
             <Box height='100%' display='flex' flexDirection='column'>
@@ -20,10 +23,10 @@ export default function AppRouter() {
                             <Home />
                         </Route>
                         <Route exact path='/login'>
-                            <LoginPage />
+                            {user ? <Redirect to='/' /> : <LoginPage />}
                         </Route>
-                        <Route exact path='/signup'>
-                            <SignUpPage />
+                        <Route exact path='/register'>
+                            {user ? <Redirect to='/' /> : <SignUpPage />}
                         </Route>
                         <Route exact path='/stores/:id'>
                             <StorePage />
@@ -35,7 +38,7 @@ export default function AppRouter() {
                             <Checkout />
                         </Route>
                         <Route exact path='/profile'>
-                            <ProfilePage />
+                            {user ? <ProfilePage /> : <Redirect to='/' />}
                         </Route>
                         <Route>
                             <Error404Page />
