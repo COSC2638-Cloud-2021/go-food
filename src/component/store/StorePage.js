@@ -13,8 +13,8 @@ import ProductMenu from "./ProductMenu"
 
 export default function StorePage() {
     const { id } = useParams()
-    const { data, error, loading, setLoading } = useApiGet({ endpoint: `/stores/${id}`, defaultValue: mockStore })
-    const { name, address, description, image: { url: imageUrl } = {}, subMenus = [] } = data || {}
+    const { data, error, loading, setLoading } = useApiGet({ endpoint: `/restaurants/${id}`, defaultValue: mockStore })
+    const { name, address, description, image, menus = [] } = data || {}
 
     useEffect(() => {
         setLoading(true)
@@ -28,7 +28,7 @@ export default function StorePage() {
                         <SimpleGrid columns={12} w={['100%', null, '50%']}>
                             <GridItem colSpan={[12, null, 3]}>
                                 <Box p={4}>
-                                    <Image fallbackSrc={logo} objectFit='cover' alt={name} h={[300, 200]} w='100%' src={imageUrl} />
+                                    <Image fallbackSrc={logo} objectFit='cover' alt={name} h={[300, 200]} w='100%' src={image} />
                                 </Box>
                             </GridItem>
                             <GridItem colSpan={[12, null, 9]}>
@@ -43,13 +43,13 @@ export default function StorePage() {
                             <GridItem colSpan={[12, null, null, 3]}>
                                 <Box p={2}>
                                     <Text fontSize='2xl' fontWeight={600}>Menu</Text>
-                                    {subMenus.map(menu =>
+                                    {menus.map(menu =>
                                         <Link to='#' key={menu.id}><Text py={2} fontSize='md'>{menu.name} ({menu.products.length})</Text></Link>
                                     )}
                                 </Box>
                             </GridItem>
                             <GridItem colSpan={[12, null, 8, 6]}>
-                                {subMenus.map(menu => <ProductMenu key={menu.id} menu={menu} storeId={id} />)}
+                                {menus.map(menu => <ProductMenu key={menu.id} menu={menu} storeId={id} />)}
                             </GridItem>
                             <GridItem colSpan={[12, null, 4, 3]}>
                                 <Box p={2}>

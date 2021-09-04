@@ -31,11 +31,8 @@ export default function AppRouter() {
                         <Route exact path='/stores/:id'>
                             <StorePage />
                         </Route>
-                        <Route exact path='/checkout'>
-                            <Checkout />
-                        </Route>
                         <Route exact path='/stores/:id/checkout'>
-                            <Checkout />
+                            {user ? <Checkout /> : <Redirect to='/login' />}
                         </Route>
                         <Route exact path='/profile'>
                             {user ? <ProfilePage /> : <Redirect to='/' />}

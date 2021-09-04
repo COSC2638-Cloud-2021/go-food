@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Fragment } from 'react'
 import { BiTimeFive } from 'react-icons/bi'
 import { IoLocationOutline } from 'react-icons/io5'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import api from '../../api/api'
 import useApiGet from '../../hook/useApiGet'
 import useInput from '../../hook/useInput'
@@ -15,6 +16,7 @@ import { useErrorToast, useSuccessToast } from '../shared/toast'
 
 function UserEditForm({ onCancel }) {
     const user = useAuthStore(state => state.user)
+    const { id: userId } = user
     const { value: name, onInput: onNameInput } = useInput(user.name)
     const { value: email, onInput: onEmailInput } = useInput(user.email)
     const { value: phoneNumber, onInput: onPhoneNumberInput } = useInput(user.phoneNumber)
@@ -27,7 +29,7 @@ function UserEditForm({ onCancel }) {
         e.preventDefault()
         setSubmitting(true)
         try {
-            await api.patch('/users/me', { name, email, phoneNumber, address })
+            await api.patch(`/accounts/${userId}`, { name, email, phoneNumber, address })
             await fetchCurrentUser()
             successToast({
                 title: 'Update info successfully!',
@@ -82,7 +84,7 @@ function UserEditForm({ onCancel }) {
 
 function UserInfo() {
     const user = useAuthStore(state => state.user)
-    const { id, name, phoneNumber, address, email, avatar } = user
+    const { id, name, phoneNumber, address, email, avatar, balance } = user
     const { url: avatarUrl } = avatar || {}
     const [editMode, setEditMode] = useBoolean()
 
@@ -104,6 +106,10 @@ function UserInfo() {
                     <Flex my={1} align='center'>
                         <Icon as={IoLocationOutline} mr={2} />
                         <Text>{address}</Text>
+                    </Flex>
+                    <Flex my={1} align='center'>
+                        <Icon as={RiMoneyDollarCircleFill} mr={2} />
+                        <Text>{formatCurrency(balance ?? 0)}</Text>
                     </Flex>
                     <Button onClick={setEditMode.on} mt={2} variant='outline' alignSelf='center' w='100%' colorScheme='yellow' size='sm'>Edit profile</Button>
                 </Fragment>
@@ -127,13 +133,13 @@ function Info({ label, value }) {
 
 
 function Order({ order }) {
-    const { id, name, address, phoneNumber, note, createdAt, status, orderDetails, totalPrice } = order
+    const { id, contactName, address, phoneNumber, note, orderDate, orderStatus, orderLines, total } = order
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const isCompleted = status === 'COMPLETED'
+    const isCompleted = orderStatus === 'COMPLETED'
     return (
         <Box border='1px' borderColor={isCompleted ? 'green.400' : 'yellow.400'} onClick={onOpen} cursor='pointer' boxShadow='sm' borderRadius='md' p={4}>
             <Text fontSize='lg' fontWeight={600}>Order #{id}</Text>
-            <Text color='gray.600' fontSize='sm'>{new Date(createdAt).toISOString().substring(0, 10)}</Text>
+            <Text color='gray.600' fontSize='sm'>{new Date(orderDate).toISOString().substring(0, 10)}</Text>
             <Flex my={1} align='center'>
                 {isCompleted ?
                     <Icon color='green.400' as={CheckIcon} mr={2} /> :
@@ -143,16 +149,16 @@ function Order({ order }) {
                     color={isCompleted ? 'green.400' : 'yellow.600'}
                     textTransform='capitalize' fontSize='sm'
                 >
-                    {status.toLowerCase()}
+                    {orderStatus.toLowerCase()}
                 </Text>
             </Flex>
-            <Text fontWeight={600} align='right'>{formatCurrency(totalPrice)}</Text>
+            <Text fontWeight={600} align='right'>{formatCurrency(total)}</Text>
             <Modal size='3xl' preserveScrollBarGap closeOnOverlayClick isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent p={4}>
                     <ModalHeader>
                         <Text fontSize='xl' fontWeight={600}>Order #{id}</Text>
-                        <Text color='gray.600' fontSize='md'>{new Date(createdAt).toISOString().substring(0, 10)}</Text>
+                        <Text color='gray.600' fontSize='md'>{new Date(orderDate).toISOString().substring(0, 10)}</Text>
                         <Flex my={1} align='center'>
                             {isCompleted ?
                                 <Icon color='green.400' as={CheckIcon} mr={2} /> :
@@ -162,13 +168,13 @@ function Order({ order }) {
                                 color={isCompleted ? 'green.400' : 'yellow.600'}
                                 textTransform='capitalize' fontSize='md'
                             >
-                                {status.toLowerCase()}
+                                {orderStatus.toLowerCase()}
                             </Text>
                         </Flex>
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Info label='Name' value={name} />
+                        <Info label='Name' value={contactName} />
                         <Info label='Address' value={address} />
                         <Info label='Phone number' value={phoneNumber} />
                         <Info label='Note' />
@@ -183,7 +189,7 @@ function Order({ order }) {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {orderDetails.map(({ product, id, quantity, price }) => (
+                                {orderLines.map(({ product, id, quantity, price }) => (
                                     <Tr key={id}>
                                         <Td>{product?.name}</Td>
                                         <Td isNumeric>{quantity}</Td>
@@ -194,7 +200,7 @@ function Order({ order }) {
                             <Tfoot>
                                 <Tr>
                                     <Th fontSize='md' colSpan={2}>Total</Th>
-                                    <Th fontSize='md' isNumeric>{formatCurrency(totalPrice)}</Th>
+                                    <Th fontSize='md' isNumeric>{formatCurrency(total)}</Th>
                                 </Tr>
                             </Tfoot>
                         </Table>
@@ -207,7 +213,7 @@ function Order({ order }) {
 
 function OrderList() {
     const [tabIndex, setTabIndex] = useState(0)
-    const { data: orders, loading } = useApiGet({ endpoint: '/orders', defaultValue: mockOrders })
+    const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: mockOrders })
     const isCompleted = tabIndex === 1
     const displayedOrders = isCompleted ?
         orders.filter(order => order.status === 'COMPLETED')

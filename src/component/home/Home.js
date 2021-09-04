@@ -3,6 +3,7 @@ import { Image, Box, Flex, Text } from '@chakra-ui/react';
 import {
     Badge, Button, Card, Col, Container, Row
 } from "react-bootstrap";
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import logo from '../../asset/image/logo.png';
 import useApiGet from '../../hook/useApiGet';
@@ -12,6 +13,7 @@ export default function Home() {
     const { data: restaurants, loading, error } = useApiGet({ defaultValue: [], endpoint: '/restaurants' })
     return (
         <Box>
+            <Helmet title='GoFood'/>
             {/* <Menu/> */}
             {/* <Menu1/> */}
             <FilterItems />

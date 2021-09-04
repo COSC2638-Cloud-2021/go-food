@@ -1,178 +1,136 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckSquare, faCoffee } from '@fortawesome/fontawesome-free-solid'
-import { 
-    Button,
-    ButtonGroup,
-    Card,
-    Col, 
-    Container,
-    Image,
-    Badge,
-    Form,
-    Row 
-} from "react-bootstrap";
-import 'holderjs';
+import { Box, Button, Flex, FormControl, FormLabel, GridItem, Icon, Image, Input, SimpleGrid, Text, Textarea } from '@chakra-ui/react';
+import { useState } from 'react';
+import { FiCheckCircle } from 'react-icons/fi';
+import { useParams } from 'react-router';
+import logo from '../../asset/image/logo.png';
+import useInput from '../../hook/useInput';
+import useAuthStore from '../../store/useAuthStore';
+import useCartsStore from '../../store/useCartsStore';
+import formatCurrency from '../../util/formatCurrency';
+import getArrayEntries from '../../util/getArrayEntries';
+import { useErrorToast } from '../shared/toast';
+import { Link } from 'react-router-dom'
 import './Checkout.css';
 
+
 export default function Checkout() {
+    const { id: storeId } = useParams()
+    const user = useAuthStore(state => state.user)
+    const { value: name, onInput: onNameInput } = useInput(user ? user.name : '')
+    const { value: phoneNumber, onInput: onPhoneNumberInput } = useInput(user ? user.phoneNumber : '')
+    const { value: address, onInput: onAddressInput } = useInput(user ? user.address : '')
+    const { value: note, onInput: onNoteInput } = useInput('')
+    const [submitting, setSubmitting] = useState(false)
+    const submitOrder = useCartsStore(s => s.submitOrder)
+    const cart = useCartsStore(s => s.carts[storeId])
+    const { total } = cart
+    const products = getArrayEntries(cart.products)
+    const errorToast = useErrorToast()
+    const [orderPlaced, setOrderPlaced] = useState(false)
+    async function handleOrderSubmit(e) {
+        e.preventDefault()
+        if (submitting) return
+        setSubmitting(true)
+        try {
+            const data = await submitOrder({ storeId: Number(storeId), address, note, name, phoneNumber })
+            if (data) {
+                setOrderPlaced(true)
+            }
+        } catch (e) {
+            errorToast({
+                title: 'Order failed!',
+                description: 'Something wrong happened!',
+            })
+        } finally {
+            setSubmitting(false)
+        }
+    }
+
     return (
-        <Container className="mt-2 mb-4">
-            <Header/>
-            <Body/>
-        </Container>
+        <Box p={5}>
+            {
+                orderPlaced ? <OrderPlaced /> :
+                    <>
+                        <Box>
+                            <Text align='center' fontSize='3xl' fontWeight={600}>Checkout</Text>
+                        </Box>
+                        <SimpleGrid columns={12} spacing={5} mt={5}>
+                            <GridItem colSpan={[12, null, 1, 2]}>
+                            </GridItem>
+                            <GridItem colSpan={[12, null, 5, 4]}>
+                                <Box p={5} boxShadow='md'>
+                                    <Text fontSize='2xl' fontWeight={600} mb={2}>My cart</Text>
+                                    {products.map((product => ( // 'length' depend on data
+                                        <Product product={product} key={product.id} />
+                                    )))
+                                    }
+                                    <Flex mt={1}>
+                                        <Text fontSize='xl' fontWeight={600}>Total</Text>
+                                        <Text ml='auto' fontSize='xl' fontWeight={600}>{formatCurrency(total)}</Text>
+                                    </Flex>
+                                </Box>
+                            </GridItem>
+                            <GridItem colSpan={[12, null, 5, 4]}>
+                                <Box p={5} boxShadow='md'>
+                                    <Text fontSize='2xl' fontWeight={600}>Delivery information</Text>
+                                    <Box mt={5}>
+                                        <form onSubmit={handleOrderSubmit}>
+                                            <FormControl id="name" mb={2}>
+                                                <FormLabel>Name</FormLabel>
+                                                <Input value={name} onInput={onNameInput} required />
+                                            </FormControl>
+                                            <FormControl id="phoneNumber" mb={2}>
+                                                <FormLabel>Phone Number</FormLabel>
+                                                <Input type='tel' value={phoneNumber} onInput={onPhoneNumberInput} required />
+                                            </FormControl>
+                                            <FormControl id="address" mb={2}>
+                                                <FormLabel>Address</FormLabel>
+                                                <Input value={address} onInput={onAddressInput} required />
+                                            </FormControl>
+                                            <FormControl id="note" mb={2}>
+                                                <FormLabel>Note</FormLabel>
+                                                <Textarea noOfLines={3} value={note} onInput={onNoteInput} />
+                                            </FormControl>
+                                            <Flex justify='right' align='center'>
+                                                <Link to={`/stores/${storeId}`}><Button type='button'>Back to store</Button></Link>
+                                                <Button ml={2} isLoading={submitting} type='submit' colorScheme='yellow'>Order</Button>
+                                            </Flex>
+                                        </form>
+                                    </Box>
+                                </Box>
+                            </GridItem>
+                            <GridItem colSpan={[12, null, 1, 2]}>
+                            </GridItem>
+                        </SimpleGrid>
+                    </>
+            }
+        </Box >
+
     )
 }
-
-function Header() {
+function Product({ product }) {
+    const { quantity, data } = product
+    const { id, name, price, image } = data
     return (
-        <div>
-            <h1 style={{ fontSize: "30px", fontWeight: "bold", fontFamily: "Times New Roman" }}>Order Checkout</h1>
-        </div>
-        
+        <Flex align='center'>
+            <Image h={50} w={50} fallbackSrc={logo} />
+            <Flex>
+                <Text fontWeight={600}>{name}</Text>
+                <Text ml={2}>x{quantity}</Text>
+            </Flex>
+            <Box ml='auto'>
+                <Text fontWeight={600}>{formatCurrency(quantity * price)}</Text>
+            </Box>
+        </Flex>
     )
 }
 
-function Body() {
+function OrderPlaced() {
     return (
-        <Row className="mt-4 mb-4">
-            <Col className="mt-2 mb-4" lg={8} style={{padding:"20px 20px", backgroundColor:"white", borderRadius:"8px", border:"1px solid #cccccc"}}>
-                <Row style={{borderBottom:" ", padding:"10px 10px", border:""}}>
-                    <Col lg={9} style={{border:" ", fontSize:"26px", fontWeight:"bold"}}>My cart</Col>
-                    <Col lg={2} style={{alignItems:"right", border:" "}}><button className="COsection__confirmButton">Confirm</button></Col>
-                </Row>
-                <Row ><ItemList/></Row>
-                <Row ><Subtotal/></Row>
-                <Row><DeliveryAddress/></Row>
+        <Flex direction='column' align='center' jusitfy='center'>
+            <Text color='teal.400' fontSize='3xl' fontWeight={600}>Your order has been placed!</Text>
+            <Icon my={2} as={FiCheckCircle} color='teal.400' boxSize={50} />
+        </Flex>
+    )
 
-            </Col>
-            <Col xs={4}><TotalPayment/></Col>
-            
-        </Row>
-    )
-}
-
-function TotalPayment() {
-    return (
-        <div>
-            <Row className="mb-4">
-                <Col md={6} style={{ fontSize: "30px", fontWeight: "bold"}}><h1>Total Payment</h1></Col>
-            </Row>
-            <div style={{padding: "20px 20px", backgroundColor:""}}>
-                <div >
-                    <Row style={{fontWeight: "bold"}} >
-                        <Col xs={7}>Subtotal</Col>
-                        <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                    </Row>
-                    <Row style={{color:"grey"}} >
-                        <Col xs={7}>Delivery fee</Col>
-                        <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                    </Row>
-                    <Row style={{color:"grey"}}>
-                        <Col xs={7}>Discount</Col>
-                        <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                    </Row>
-                </div>
-                <div className="mt-4">
-                    <Row >
-                        <Col xs={7}>Paid</Col>
-                        <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                        
-                    </Row>
-                    <Row style={{fontWeight: "bold"}} >
-                        <Col xs={7}>Remaining amount</Col>
-                        <Col xs={4} style={{textAlign:"right"}}>14400 VND</Col>
-                        
-                    </Row>
-                </div>
-                <div className="mt-4">
-                    <Row className="justify-content-md-center" >
-                        <Col md="auto"><button className="COsection_sendOrderButton" >Send order</button></Col>
-                    </Row>
-                </div>
-           
-            </div>
-        </div>  
-    )
-}
-function ItemList(){
-    return(
-        <Container style={{border:" ", padding:"20px 20px"}}>
-            <Row md={8} className="mt-4">
-                {Array.from({ length: 3 }).map((_, idx) => ( // 'length' depend on data
-                    <Row className="mb-2">
-                        <Col xs={3} style={{border:" "}}>
-                            <Card style={{ width: '10rem', alignItems:"center"}} >
-                                <Card.Img variant="top" src="holder.js/160x130" />
-                            </Card>
-                        </Col>
-                        <Col xs={6} style={{border:"", padding:"10px 20px"}}>
-                            <Row style={{fontWeight:"bold"}}>Item Name</Row>
-                            <Row style={{color:"#999999"}}>Item description. This content can be longer.</Row>
-                        </Col>
-                        <Col style={{border:" ", textAlign:"right", fontWeight:"bold"}}>1x 18.00 VND</Col>
-                    </Row>
-                ))}
-            </Row>
-        </Container>
-    )
-}
-
-function Subtotal() {
-    return(
-        <Container>
-            <Row md={8} className="mt-4">
-                <Row className="mb-2">
-                    <Col xs={3} style={{border:""}}>
-                    </Col>
-                    <Col xs={4} style={{border:"", padding:"10px 20px"}}>
-                    </Col>
-                    <Col style={{border:"", textAlign:"", fontWeight:"bold"}}>
-                         <Row style={{fontWeight: "bold"}} >
-                            <Col xs={7}>Subtotal</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                        </Row>
-                        <Row style={{color:"grey"}} >
-                            <Col xs={7}>Delivery fee</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                        </Row>
-                        <Row style={{color:"grey"}}>
-                            <Col xs={7}>Discount</Col>
-                            <Col xs={4} style={{textAlign:"right"}} >144 VND</Col>
-                        </Row>
-                        <br></br>
-                        <Row style={{color:"grey"}}>
-                            <Col xs={7} style={{fontSize:"26px"}}>Total</Col>
-                            <Col xs={4} style={{textAlign:"right", fontSize:"20px"}} >144 VND</Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Row>
-        </Container>
-    )
-}
-
-function DeliveryAddress(){
-    return(
-        <Container>
-            <h1 style={{fontWeight:"bold", fontSize:"20px"}}>Delivery information</h1>
-            <div style={{padding:"10px 10px"}}>
-                {['Name', 'Phone', 'Address', 'Note',].map((value) => (
-            <Form.Group as={Row} className="mb-3" controlId={`Form.ControlInput${value}`}>
-                <Form.Label column sm="2">{value}</Form.Label>
-                <Col sm="8">
-                <Form.Control type={value === 'Note' ? 'textarea' : 'text'} placeholder={value} />
-                </Col>
-            </Form.Group>
-        ))}
-            </div>
-        </Container>
-    )
-}
-
-function Beverage() {
-    return (
-        <div>
-            <FontAwesomeIcon icon={faCoffee} />
-        </div>
-    )
 }
