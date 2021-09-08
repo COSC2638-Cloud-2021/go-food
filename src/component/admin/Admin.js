@@ -1,4 +1,5 @@
 import { Container, Row, Tab, Col, Tabs } from "react-bootstrap"
+import { Table, TableCaption, Thead, Tr, Th, Td, Tbody, Tfoot } from "@chakra-ui/react"
 import { TiEdit, TiDelete  } from "react-icons/ti"
 import {FaUserEdit} from "react-icons/fa"
 import {IconButton} from "@chakra-ui/react"
@@ -31,22 +32,26 @@ function MemberComponent() {
     const { data: accounts, loading, error} = useApiGet({defaultValue: [], endpoint: '/accounts'})
     return (
         <div>
-            <Row>
-                <Col xs={1}>Photo</Col>
-                <Col>Member name</Col>
-                <Col>Email</Col>
-                <Col>Mobile</Col>
-                <Col>Operation</Col>
-            </Row>
             {loading ? <LoadingSpinner /> :
-                <Container>
-                {accounts.map(({ id, name, email, phoneNumber}) => (
-                    <Row key={id}>
-                        <Col xs={1}>Picture</Col>
-                        <Col>{name}</Col>
-                        <Col>{email}</Col>
-                        <Col>{phoneNumber}</Col>
-                        <Col>
+                <Table>
+                    <TableCaption>GoFood 2020-2021</TableCaption>
+                    <Thead>
+                        <Tr>
+                        <Th>Photo</Th>
+                        <Th>Member Name</Th>
+                        <Th>Email</Th>
+                        <Th>Mobile</Th>
+                        <Th >Operation</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {accounts.map(({ id, name, email, phoneNumber}) => (
+                    <Tr key={id}>
+                        <Td>Picture</Td>
+                        <Td>{name}</Td>
+                        <Td>{email}</Td>
+                        <Td>{phoneNumber}</Td>
+                        <Td>
                             <IconButton
                                 isRound
                                 variant='ghost'
@@ -57,10 +62,11 @@ function MemberComponent() {
                                 variant='ghost'
                                 icon={<TiDelete />}>
                             </IconButton>
-                        </Col>
-                    </Row>
+                        </Td>
+                    </Tr>
                 ))}
-                </Container>
+                    </Tbody>
+                </Table>
             }
         </div>
     )
