@@ -11,6 +11,8 @@ import StorePage from "./component/store/StorePage"
 import useApiGet from "./hook/useApiGet"
 import useAuthStore from "./store/useAuthStore"
 import Admin from "./component/admin/Admin"
+import EditUser from "./component/admin/EditUser"
+import Example from "./component/test/Example"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)
@@ -40,6 +42,12 @@ export default function AppRouter() {
                         </Route>
                         <Route exact path='/admin'>
                             <Admin />
+                        </Route>
+                        <Route exact path='/admin/:id'>
+                            <EditUser />
+                        </Route>
+                        <Route exact path='/test'>
+                            <Example />
                         </Route>
                         <Route>
                             <Error404Page />

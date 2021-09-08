@@ -14,8 +14,6 @@ export default function Home() {
     return (
         <Box>
             <Helmet title='GoFood'/>
-            {/* <Menu/> */}
-            {/* <Menu1/> */}
             <FilterItems />
             {
                 loading ? <LoadingSpinner /> :
