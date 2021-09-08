@@ -33,9 +33,9 @@ function SubMenu () {
 }
 
 function MemberComponent() {
-    // const { data: accounts, loading, error} = useApiGet({defaultValue: [], endpoint: '/accounts'})
     const URL = 'https://go-food-2021.herokuapp.com/accounts'
     const [accounts, setAccounts] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         getData()
@@ -45,14 +45,21 @@ function MemberComponent() {
 
         const response = await axios.get(URL)
         setAccounts(response.data)
+        setLoading(false)
     }
-    const removeData = (id) => {
 
+    useEffect(() => {
+        if (!loading) return
+        getData()
+    }, [loading, getData])
+
+    const removeData = (id) => {
         axios.delete(`${URL}/${id}`).then(res => {
             const del = accounts.filter(account => id !== account.id)
             setAccounts(del)
         })
     }
+
     const renderHeader = () => {
         let headerElement = ['id', 'name', 'email', 'phone', 'operation']
 
@@ -60,6 +67,7 @@ function MemberComponent() {
             return <Th key={index}>{key.toUpperCase()}</Th>
         })
     }
+    
     const renderBody = () => {
         return accounts && accounts.map(({ id, name, email, phoneNumber }) => {
             return (
@@ -90,7 +98,7 @@ function MemberComponent() {
     }
     return (
         <>
-            {/* <h1 id='title'>React Table</h1> */}
+            {loading ? <LoadingSpinner /> :
             <Table id='account'>
                 <Thead>
                     <tr>{renderHeader()}</tr>
@@ -99,6 +107,7 @@ function MemberComponent() {
                     {renderBody()}
                 </Tbody>
             </Table>
+            }
         </>
     )
 }
