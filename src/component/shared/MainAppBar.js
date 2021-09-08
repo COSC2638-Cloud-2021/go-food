@@ -13,18 +13,6 @@ function AppBarItems() {
     const logout = useAuthStore(state => state.logout)
     if (user) return (
         <>
-            {
-                isAdmin &&
-                <Link to='/dashboard'>
-                    <IconButton
-                        icon={<Icon boxSize={25} as={RiDashboardFill} color='orange.400' />}
-                        variant='ghost'
-                        isRound
-                        colorScheme='blackAlpha'
-                        _focus={{ boxShadow: 'none' }}
-                    />
-                </Link>
-            }
             <Link to='/profile'>
                 <IconButton
                     icon={<Icon boxSize={25} as={HiUserCircle} color='yellow.500' />}
@@ -64,17 +52,6 @@ export default function MainAppBar() {
                 <Link to='/'>
                     <Text color='black' fontSize='2xl' fontWeight={700}>GoFood</Text>
                 </Link>
-            </Box>
-            <Box flex={8}>
-                <form>
-                    <InputGroup>
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<SearchIcon color="gray.300" />}
-                        />
-                        <Input variant='flushed' placeholder='Search for restaurants...' />
-                    </InputGroup>
-                </form>
             </Box>
             <Flex flex={2} justify='flex-end'>
                 <AppBarItems />

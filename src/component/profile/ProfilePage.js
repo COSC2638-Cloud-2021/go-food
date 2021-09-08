@@ -2,9 +2,11 @@ import { CheckIcon, EmailIcon, PhoneIcon } from '@chakra-ui/icons'
 import { Avatar, Box, Button, Flex, GridItem, Icon, Modal, ModalOverlay, SimpleGrid, Tab, TabList, Tabs, Text, useDisclosure, ModalContent, ModalHeader, ModalBody, ModalCloseButton, ModalFooter, Table, Thead, Tbody, Th, Tr, Td, Tfoot, FormControl, FormLabel, Input, useBoolean } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { Fragment } from 'react'
+import { FaUserAlt } from 'react-icons/fa'
 import { BiTimeFive } from 'react-icons/bi'
 import { IoLocationOutline } from 'react-icons/io5'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
+import { Link } from 'react-router-dom'
 import api from '../../api/api'
 import useApiGet from '../../hook/useApiGet'
 import useInput from '../../hook/useInput'
@@ -251,6 +253,28 @@ function OrderList() {
     )
 }
 
+function Manage() {
+    return (
+        <Box p={4}>
+            <Text mb={4} fontWeight={700} fontSize='2xl' textTransform='uppercase'>Manage</Text>
+            <SimpleGrid columns={[1, 2, 3, 4]} spacing={3}>
+                <ManageItem icon={FaUserAlt} name='Users' link='/dashboard/users' />
+            </SimpleGrid>
+        </Box>
+    )
+}
+
+function ManageItem({ icon, name, link }) {
+    return (
+        <Link to={link} style={{ color: 'inherit', textDecoration: 'inherit' }}>
+            <Flex align='center' direction='column' px={4} py={4} border='2px' borderColor='teal.400'>
+                <Icon mb={1} as={icon} />
+                <Text align='center' fontSize='xl' fontWeight={600}>{name}</Text>
+            </Flex>
+        </Link>
+    )
+}
+
 export default function ProfilePage() {
     return (
         <Flex h='100%' direction='column' p={4}>
@@ -261,6 +285,7 @@ export default function ProfilePage() {
                     <UserInfo />
                 </GridItem>
                 <GridItem colSpan={[12, null, 7, 6]}>
+                    <Manage />
                     <OrderList />
                 </GridItem>
                 <GridItem colSpan={[12, null, 1, 2]}>

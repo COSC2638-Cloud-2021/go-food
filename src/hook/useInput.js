@@ -11,6 +11,7 @@ const useInput = (initialValue) => {
         value,
         onInput: handleChange,
         reset,
+        setValue,
     }
 }
 

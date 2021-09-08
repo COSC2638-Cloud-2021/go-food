@@ -10,7 +10,7 @@ import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
 import useApiGet from "./hook/useApiGet"
 import useAuthStore from "./store/useAuthStore"
-import Admin from "./component/admin/Admin"
+import UserDashboard from "./component/admin/UserDashboard"
 import EditUser from "./component/admin/EditUser"
 import Example from "./component/test/Example"
 
@@ -40,10 +40,10 @@ export default function AppRouter() {
                         <Route exact path='/profile'>
                             {user ? <ProfilePage /> : <Redirect to='/' />}
                         </Route>
-                        <Route exact path='/admin'>
-                            <Admin />
+                        <Route exact path='/dashboard/users'>
+                            <UserDashboard />
                         </Route>
-                        <Route exact path='/admin/:id'>
+                        <Route exact path='/dashboard/users/:id'>
                             <EditUser />
                         </Route>
                         <Route exact path='/test'>
