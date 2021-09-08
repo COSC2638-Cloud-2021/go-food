@@ -46,25 +46,25 @@ function MemberComponent() {
                     </Thead>
                     <Tbody>
                         {accounts.map(({ id, name, email, phoneNumber}) => (
-                    <Tr key={id}>
-                        <Td>Picture</Td>
-                        <Td>{name}</Td>
-                        <Td>{email}</Td>
-                        <Td>{phoneNumber}</Td>
-                        <Td>
-                            <IconButton
-                                isRound
-                                variant='ghost'
-                                icon={<FaUserEdit />}>
-                            </IconButton>
-                            <IconButton
-                                isRound
-                                variant='ghost'
-                                icon={<TiDelete />}>
-                            </IconButton>
-                        </Td>
-                    </Tr>
-                ))}
+                            <Tr key={id}>
+                                <Td>Picture</Td>
+                                <Td>{name}</Td>
+                                <Td>{email}</Td>
+                                <Td>{phoneNumber}</Td>
+                                <Td>
+                                    <IconButton
+                                        isRound
+                                        variant='ghost'
+                                        icon={<FaUserEdit />}>
+                                    </IconButton>
+                                    <IconButton
+                                        isRound
+                                        variant='ghost'
+                                        icon={<TiDelete />}>
+                                    </IconButton>
+                                </Td>
+                            </Tr>
+                        ))}
                     </Tbody>
                 </Table>
             }
