@@ -10,6 +10,7 @@ import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
 import useApiGet from "./hook/useApiGet"
 import useAuthStore from "./store/useAuthStore"
+import Admin from "./component/admin/Admin"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)
@@ -36,6 +37,9 @@ export default function AppRouter() {
                         </Route>
                         <Route exact path='/profile'>
                             {user ? <ProfilePage /> : <Redirect to='/' />}
+                        </Route>
+                        <Route exact path='/admin'>
+                            <Admin />
                         </Route>
                         <Route>
                             <Error404Page />
