@@ -12,7 +12,7 @@ import useApiGet from "./hook/useApiGet"
 import useAuthStore from "./store/useAuthStore"
 import UserDashboard from "./component/admin/UserDashboard"
 import EditUser from "./component/admin/EditUser"
-import Example from "./component/test/Example"
+import Support from "./component/support/Support"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)
@@ -46,8 +46,8 @@ export default function AppRouter() {
                         <Route exact path='/dashboard/users/:id'>
                             <EditUser />
                         </Route>
-                        <Route exact path='/test'>
-                            <Example />
+                        <Route exact path='/support'>
+                            <Support />
                         </Route>
                         <Route>
                             <Error404Page />
