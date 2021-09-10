@@ -40,10 +40,10 @@ export default function Home() {
                 {
                     loading ? <LoadingSpinner /> :
                         <SimpleGrid spacing={5} columns={[1, 2, 3, 4]} >
-                            {filteredRestaurant.map(({ id, name, address }) => (
+                            {filteredRestaurant.map(({ id, name, address,image }) => (
                                 <Box key={id} borderRadius='lg' boxShadow='md'  >
                                     <Link to={`stores/${id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
-                                        <Box bgImage={images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='lg'>
+                                        <Box bgImage={image ?? images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='lg'>
                                             <Flex p={2} direction='column' w={75}>
                                                 <Box flex={1}>
                                                     <Badge bg="secondary">Promotion</Badge>
