@@ -276,6 +276,7 @@ function ManageItem({ icon, name, link }) {
 }
 
 export default function ProfilePage() {
+    const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
     return (
         <Flex h='100%' direction='column' p={4}>
             <SimpleGrid columns={12} spacing={3}>
@@ -285,7 +286,7 @@ export default function ProfilePage() {
                     <UserInfo />
                 </GridItem>
                 <GridItem colSpan={[12, null, 7, 6]}>
-                    <Manage />
+                    {isAdmin && <Manage />}
                     <OrderList />
                 </GridItem>
                 <GridItem colSpan={[12, null, 1, 2]}>

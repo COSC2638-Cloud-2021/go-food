@@ -16,6 +16,7 @@ import Support from "./component/support/Support"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)
+    const isAdmin = user?.role === 'admin'
     return (
         <BrowserRouter>
             <Box height='100%' display='flex' flexDirection='column'>
@@ -41,10 +42,7 @@ export default function AppRouter() {
                             {user ? <ProfilePage /> : <Redirect to='/' />}
                         </Route>
                         <Route exact path='/dashboard/users'>
-                            <UserDashboard />
-                        </Route>
-                        <Route exact path='/dashboard/users/:id'>
-                            <EditUser />
+                            {isAdmin ? <UserDashboard /> : <Error404Page />}
                         </Route>
                         <Route exact path='/support'>
                             <Support />

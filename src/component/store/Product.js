@@ -13,7 +13,7 @@ import { useErrorToast } from "../shared/toast";
 export default function Product({ product, storeId, refresh }) {
     const { id, name, price, description, image } = product || {}
     const addProductToCart = useCartsStore(state => state.addProductToCart)
-    const isAdmin = useAuthStore(s => s.user).role === 'admin'
+    const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
     const [deleting, setDeleting] = useState(false)
     const errorToast = useErrorToast()
     const { isOpen, onClose, onOpen } = useDisclosure()
