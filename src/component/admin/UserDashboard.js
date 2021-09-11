@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Container, Row, Tab, Col, Tabs } from "react-bootstrap"
-import { Table, TableCaption, Thead, Tr, Th, Td, Tbody, Tfoot, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, } from "@chakra-ui/react"
+import { Table, useDisclosure, TableCaption, Thead, Tr, Th, Td, Tbody, Tfoot, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, } from "@chakra-ui/react"
 import { TiEdit, TiDelete } from "react-icons/ti"
 import { Link } from 'react-router-dom'
 import { FaUserEdit } from "react-icons/fa"
@@ -10,16 +10,17 @@ import LoadingSpinner from "../shared/LoadingSpinner"
 import api from "../../api/api"
 import axios from 'axios'
 import EditUser from "./EditUser"
+import EditUserModal from "./EditUserModal"
 
 export default function UserDashboard() {
     const { data: accounts, loading, refresh } = useApiGet({ endpoint: '/accounts', defaultValue: [] })
-
-
+    const [filter, setFilter] = useState('user')
+    const filteredAccounts = accounts.filter(a => (!a.role && filter === 'user') || a.role === filter)
 
     return (
         <Container className="mt-4">
-            <Tabs defaultActiveKey="member" id="uncontrolled-tab-example" className="mb-3">
-                <Tab eventKey="member" title="Members">
+            <Tabs onSelect={k => setFilter(k)} defaultActiveKey="member" id="uncontrolled-tab-example" className="mb-3">
+                <Tab eventKey="user" title="User">
                 </Tab>
                 <Tab eventKey="admin" title="Admin">
                 </Tab>
@@ -38,7 +39,7 @@ export default function UserDashboard() {
                     </Thead>
                     <Tbody>
                         {
-                            accounts.map((user) => (<UserRow user={user} onDelete={refresh} />))
+                            filteredAccounts.map((user) => (<UserRow key={user.id} refresh={refresh} user={user} onDelete={refresh} />))
                         }
                     </Tbody>
                 </Table>
@@ -47,8 +48,9 @@ export default function UserDashboard() {
     )
 }
 
-function UserRow({ user, onDelete }) {
+function UserRow({ user, onDelete, refresh }) {
     const { id, name, phoneNumber, address, email } = user
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const deleteAccount = async () => {
         try {
             const res = await api.delete(`/accounts/${id}`)
@@ -63,15 +65,14 @@ function UserRow({ user, onDelete }) {
         <Td>{email}</Td>
         <Td>{phoneNumber}</Td>
         <Td>{address}</Td>
-        <Td className='opration'>
-            {/* <button className='button' onClick={() => removeData(id)}>Delete</button> */}
-            <Link to={`/dashboard/users/${id}`} style={{ textDecoration: 'none' }}>
-                <IconButton
-                    isRound
-                    variant='ghost'
-                    icon={<FaUserEdit />}>
-                </IconButton>
-            </Link>
+        <Td className='operation'>
+            <IconButton
+                onClick={onOpen}
+                isRound
+                variant='ghost'
+                icon={<FaUserEdit />}>
+            </IconButton>
+            <EditUserModal user={user} onClose={onClose} isOpen={isOpen} refresh={refresh} />
             <IconButton
                 isRound
                 variant='ghost'

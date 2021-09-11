@@ -27,15 +27,11 @@ const useAuthStore = create(persist(
       try {
         const res = await api.get('accounts/me')
         const user = res.data
-        console.log(user)
-        if (!user) {
-          get().clearUser()
-          return
-        }
         set({ user })
         return get().user
       } catch (e) {
         console.log(e.response)
+        get().clearUser()
         return null
       }
     },

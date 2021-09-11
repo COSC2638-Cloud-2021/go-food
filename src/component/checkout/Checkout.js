@@ -112,8 +112,8 @@ function Product({ product }) {
     const { quantity, data } = product
     const { id, name, price, image } = data
     return (
-        <Flex align='center'>
-            <Image h={50} w={50} fallbackSrc={logo} />
+        <Flex align='center' mb={2}>
+            <Image mr={2} borderRadius='full' h={45} w={45} src={image} fallbackSrc={logo} />
             <Flex>
                 <Text fontWeight={600}>{name}</Text>
                 <Text ml={2}>x{quantity}</Text>

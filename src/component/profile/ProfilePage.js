@@ -39,7 +39,7 @@ function UserEditForm({ onCancel }) {
             onCancel()
         }
         catch (e) {
-            const message = e.response.data.message[0]
+            const message = e.response.data.message
             errorToast({
                 title: 'Update info failed!',
                 description: message,
@@ -215,7 +215,7 @@ function Order({ order }) {
 
 function OrderList() {
     const [tabIndex, setTabIndex] = useState(0)
-    const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: mockOrders })
+    const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
     const isCompleted = tabIndex === 1
     const displayedOrders = isCompleted ?
         orders.filter(order => order.status === 'COMPLETED')

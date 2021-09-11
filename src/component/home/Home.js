@@ -1,5 +1,5 @@
 import { StarIcon } from '@chakra-ui/icons';
-import { Box, Flex, Icon, SimpleGrid, Text, Input, Button } from '@chakra-ui/react';
+import { Box, Flex, Icon, SimpleGrid, Text, Input, Button, useDisclosure, Image } from '@chakra-ui/react';
 import {
     Badge
 } from "react-bootstrap";
@@ -8,15 +8,17 @@ import { Link } from 'react-router-dom';
 import images from '../../asset/image/images';
 import useApiGet from '../../hook/useApiGet';
 import useQuery from '../../hook/useQuery';
+import useAuthStore from '../../store/useAuthStore';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import AddStoreModal from '../admin/AddStoreModal'
 
 export default function Home() {
     const query = useQuery()
     const searchTerm = query.get('q')
-    const { data: restaurants, loading, error } = useApiGet({ defaultValue: [], endpoint: '/restaurants' })
+    const { data: restaurants, loading, error, refresh } = useApiGet({ defaultValue: [], endpoint: '/restaurants' })
     const filteredRestaurant = searchTerm ? restaurants.filter(({ name = '', address = '' }) =>
         `${name}/${address}`.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) : restaurants
-    
+
 
     return (
         <Box h='100%'>
@@ -26,8 +28,8 @@ export default function Home() {
                     <Text mb={8} color='white' fontSize='2xl'>Go order your food</Text>
                     <form>
                         <Flex align='center' justify='center'>
-                            <Input defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={7} w={[300, 400, 500, 600]} borderRadius='xl' 
-                            bgColor='white' variant='outlined' placeholder='Search for restaurants by name, address...' />
+                            <Input defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={7} w={[300, 400, 500, 600]} borderRadius='xl'
+                                bgColor='white' variant='outlined' placeholder='Search for restaurants by name, address...' />
                             <Button fontSize='lg' colorScheme='yellow' p={7} type='submit'>Search</Button>
                         </Flex>
                     </form>
@@ -36,23 +38,14 @@ export default function Home() {
             </Box>
             <Box minH='75%' mt={2} mx='auto' w={['100%', null, '90%', '80%']}>
                 <Helmet title='GoFood' />
-                <FilterItems />
+                <FilterItems refresh={refresh} />
                 {
                     loading ? <LoadingSpinner /> :
                         <SimpleGrid spacing={5} columns={[1, 2, 3, 4]} >
-                            {filteredRestaurant.map(({ id, name, address,image }) => (
-                                <Box key={id} borderRadius='lg' boxShadow='md'  >
+                            {filteredRestaurant.map(({ id, name, address, image }) => (
+                                <Box key={id} borderRadius='2xl' boxShadow='lg'  >
                                     <Link to={`stores/${id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
-                                        <Box bgImage={image ?? images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='lg'>
-                                            <Flex p={2} direction='column' w={75}>
-                                                <Box flex={1}>
-                                                    <Badge bg="secondary">Promotion</Badge>
-                                                </Box>
-                                                <Box flex={1}>
-                                                    <Badge bg="primary" variant="dark">20% OFF</Badge>
-                                                </Box>
-                                            </Flex>
-                                        </Box>
+                                        <Image src={image ?? images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='2xl' />
                                         <Box mt={2} px={4} pb={2} w='100%' overflow='hidden'>
                                             <Flex>
                                                 <Text maxW='sm' isTruncated fontWeight={600} fontSize='xl' textOverflow='ellipsis' >{name}</Text>
@@ -74,12 +67,20 @@ export default function Home() {
     )
 }
 
-function FilterItems() {
+function FilterItems({ refresh }) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
     return (
         <Flex my={4}>
             <Button colorScheme='yellow' mr={2}>Filter</Button>
             <Button colorScheme='yellow' mr={2}>Rating</Button>
             <Button colorScheme='yellow' >Great offer</Button>
+            {isAdmin &&
+                <>
+                    <Button onClick={onOpen} ml='auto' colorScheme='green'>Add store</Button>
+                    <AddStoreModal refresh={refresh} onClose={onClose} isOpen={isOpen} />
+                </>
+            }
         </Flex>
     )
 }
