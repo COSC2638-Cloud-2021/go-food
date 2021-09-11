@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react"
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom"
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom"
+import UserDashboard from "./component/admin/UserDashboard"
 import Checkout from "./component/checkout/Checkout"
 import Home from "./component/home/Home"
 import LoginPage from "./component/login/LoginPage"
@@ -8,11 +9,8 @@ import ProfilePage from "./component/profile/ProfilePage"
 import Error404Page from "./component/shared/Error404Page"
 import MainAppBar from "./component/shared/MainAppBar"
 import StorePage from "./component/store/StorePage"
-import useApiGet from "./hook/useApiGet"
-import useAuthStore from "./store/useAuthStore"
-import UserDashboard from "./component/admin/UserDashboard"
-import EditUser from "./component/admin/EditUser"
 import Support from "./component/support/Support"
+import useAuthStore from "./store/useAuthStore"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)

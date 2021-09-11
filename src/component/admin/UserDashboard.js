@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react"
-import { Container, Row, Tab, Col, Tabs } from "react-bootstrap"
-import { Table, useDisclosure, TableCaption, Thead, Tr, Th, Td, Tbody, Tfoot, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, } from "@chakra-ui/react"
-import { TiEdit, TiDelete } from "react-icons/ti"
-import { Link } from 'react-router-dom'
+import { IconButton, Table, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
+import { useState } from "react"
+import { Container, Tab, Tabs } from "react-bootstrap"
 import { FaUserEdit } from "react-icons/fa"
-import { IconButton } from "@chakra-ui/react"
+import { TiDelete } from "react-icons/ti"
+import api from "../../api/api"
 import useApiGet from "../../hook/useApiGet"
 import LoadingSpinner from "../shared/LoadingSpinner"
-import api from "../../api/api"
-import axios from 'axios'
-import EditUser from "./EditUser"
 import EditUserModal from "./EditUserModal"
 
 export default function UserDashboard() {
