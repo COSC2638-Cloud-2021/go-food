@@ -8,6 +8,10 @@ import { Link } from 'react-router-dom';
 import logo from '../../asset/image/logo.png';
 import useApiGet from '../../hook/useApiGet';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import {FaFacebook, FaPinterest, FaInstagramSquare, FaTwitter} from "react-icons/fa";
+import * as Icons from "react-icons/fa"
+import {IconButton, Heading} from "@chakra-ui/react"
+
 
 export default function Home() {
     const { data: restaurants, loading, error } = useApiGet({ defaultValue: [], endpoint: '/restaurants' })
@@ -57,6 +61,7 @@ export default function Home() {
                         </Row>
                     </Container >
             }
+            <Footer />
         </Box>
     )
 }
@@ -72,3 +77,54 @@ function FilterItems() {
         </Container>
     )
 }
+
+function Footer () {
+    return(
+        <div className="mt-4" >
+            <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        }}>
+                <IconButton
+                    isRound
+                    variant='ghost'
+                    icon={<FaFacebook />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    variant='ghost'
+                    icon={<FaPinterest />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    variant='ghost'
+                    icon={<FaInstagramSquare />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    variant='ghost'
+                    icon={<FaTwitter />}>
+                </IconButton>
+            </div>
+            <div style={{backgroundColor: "#333333"}}>
+            <Heading as="h5" size="sm" style={{textAlign: "center", padding: "10px 10px", color: "white", fontFamily: "New Century Schoolbook, serif"}}>{renderCategory()}</Heading>
+            </div>  
+            <div style={{background: "green", textAlign: "center", padding: "10px 10px", fontFamily: "Helvetica Narrow, sans-serif"}}><span style={{textTransform: "uppercase", color: "white"}}>healthy fast casual food, craft with love in minneapolis</span></div>
+        </div>
+    )
+}
+
+const renderCategory = () => {
+    let categoryElement = ['home', 'menu', 'story', 'detox', 'locations']
+
+    return categoryElement.map((key, index) => {
+        return<span key={index} style={{marginRight: '3rem'}}>{key.toUpperCase()}</span>
+    })
+}
+
+// const renderSlogan = () => {
+//     var slogan = ['healthy fast casual food, craft with love in minneapolis']
+
+//     return<span>{slogan.toUpperCase()}</span>
+// }
