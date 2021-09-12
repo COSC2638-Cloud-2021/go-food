@@ -122,9 +122,3 @@ const renderCategory = () => {
         return<span key={index} style={{marginRight: '3rem'}}>{key.toUpperCase()}</span>
     })
 }
-
-// const renderSlogan = () => {
-//     var slogan = ['healthy fast casual food, craft with love in minneapolis']
-
-//     return<span>{slogan.toUpperCase()}</span>
-// }
