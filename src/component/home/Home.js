@@ -9,7 +9,6 @@ import logo from '../../asset/image/logo.png';
 import useApiGet from '../../hook/useApiGet';
 import LoadingSpinner from '../shared/LoadingSpinner';
 import {FaFacebook, FaPinterest, FaInstagramSquare, FaTwitter} from "react-icons/fa";
-import * as Icons from "react-icons/fa"
 import {IconButton, Heading} from "@chakra-ui/react"
 
 
