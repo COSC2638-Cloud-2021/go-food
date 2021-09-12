@@ -135,9 +135,10 @@ function Info({ label, value }) {
 
 
 function Order({ order }) {
-    const { id, contactName, address, phoneNumber, note, orderDate, orderStatus, orderLines, total } = order
+    const { id, contactName, address, phoneNumber, note, orderDate, status, orderLines, total } = order
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const isCompleted = orderStatus === 'COMPLETED'
+    const isCompleted = status === 'COMPLETED'
+    const statusDisplay = status ?? 'pending'
     return (
         <Box border='1px' borderColor={isCompleted ? 'green.400' : 'yellow.400'} onClick={onOpen} cursor='pointer' boxShadow='sm' borderRadius='md' p={4}>
             <Text fontSize='lg' fontWeight={600}>Order #{id}</Text>
@@ -151,7 +152,7 @@ function Order({ order }) {
                     color={isCompleted ? 'green.400' : 'yellow.600'}
                     textTransform='capitalize' fontSize='sm'
                 >
-                    {orderStatus.toLowerCase()}
+                    {statusDisplay}
                 </Text>
             </Flex>
             <Text fontWeight={600} align='right'>{formatCurrency(total)}</Text>
@@ -170,7 +171,7 @@ function Order({ order }) {
                                 color={isCompleted ? 'green.400' : 'yellow.600'}
                                 textTransform='capitalize' fontSize='md'
                             >
-                                {orderStatus.toLowerCase()}
+                                {statusDisplay}
                             </Text>
                         </Flex>
                     </ModalHeader>
