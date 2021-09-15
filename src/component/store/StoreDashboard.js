@@ -172,36 +172,40 @@ function RequestRow({ request, refresh, isAdmin }) {
                 <Text ml={2} textTransform='capitalize' fontWeight={600} color={statusStyles[status]?.color}>{status}</Text>
             </Flex>
         </Td>
-        {isAdmin &&
-            <Td textAlign='center'>
-                <Flex justify='center' align='center'>
-                    <IconButton
-                        isLoading={approving}
-                        isRound
-                        colorScheme='green'
-                        variant='ghost'
-                        onClick={approveRequest}
-                        icon={approveIcon}>
-                    </IconButton>
-                    <IconButton
-                        isLoading={declining}
-                        isRound
-                        colorScheme='red'
-                        variant='ghost'
-                        onClick={declineRequest}
-                        icon={declinedIcon}>
-                    </IconButton>
-                    <IconButton
-                        isLoading={deleting}
-                        isRound
-                        colorScheme='red'
-                        variant='ghost'
-                        onClick={deleteRequest}
-                        icon={<Icon boxSize={25} color='red.400' as={IoTrash} />}>
-                    </IconButton>
-                </Flex>
-            </Td>
-        }
+
+        <Td textAlign='center'>
+            <Flex justify='center' align='center'>
+                {isAdmin &&
+                    <>
+                        <IconButton
+                            isLoading={approving}
+                            isRound
+                            colorScheme='green'
+                            variant='ghost'
+                            onClick={approveRequest}
+                            icon={approveIcon}>
+                        </IconButton>
+                        <IconButton
+                            isLoading={declining}
+                            isRound
+                            colorScheme='red'
+                            variant='ghost'
+                            onClick={declineRequest}
+                            icon={declinedIcon}>
+                        </IconButton>
+                    </>
+                }
+                <IconButton
+                    isLoading={deleting}
+                    isRound
+                    colorScheme='red'
+                    variant='ghost'
+                    onClick={deleteRequest}
+                    icon={<Icon boxSize={25} color='red.400' as={IoTrash} />}>
+                </IconButton>
+            </Flex>
+        </Td>
+
     </Tr>
 }
 
@@ -220,7 +224,7 @@ function RequestList({ requests, refresh, isAdmin, loading, restaurantId }) {
                             <Th>ID</Th>
                             <Th>Content</Th>
                             <Th textAlign='right'>Status</Th>
-                            {isAdmin && <Th textAlign='center'>Operation</Th>}
+                            <Th textAlign='center'>Operation</Th>
                         </tr>
                     </Thead>
                     <Tbody>
