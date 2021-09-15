@@ -1,8 +1,9 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
-import { Box, Input, Button, Flex, GridItem, Image, SimpleGrid, Text, useDisclosure, Icon } from "@chakra-ui/react"
+import { Box, Button, Flex, GridItem, Icon, Image, Input, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react"
 import { Fragment, useEffect, useRef, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { Link, useParams, useHistory } from "react-router-dom"
+import { RiDashboardFill } from 'react-icons/ri'
+import { Link, useHistory, useParams } from "react-router-dom"
 import { HashLink } from "react-router-hash-link"
 import api from "../../api/api"
 import logo from '../../asset/image/logo.png'
@@ -12,8 +13,8 @@ import mockStore from "../../mock/mockStore"
 import useAuthStore from "../../store/useAuthStore"
 import EditStoreModal from "../admin/EditStoreModal"
 import Cart from "../cart/Cart"
-import AppDivider from "../shared/AppDivider"
 import DeleteAlertDialog from "../shared/DeleteAlertDialog"
+import Error404Page from "../shared/Error404Page"
 import LoadingSpinner from "../shared/LoadingSpinner"
 import { useErrorToast } from "../shared/toast"
 import ProductMenu from "./ProductMenu"
@@ -63,7 +64,7 @@ function MenuList({ menus, onAdded, storeId }) {
 
 export default function StorePage() {
     const { id } = useParams()
-    const { data: store, error, loading, setLoading, refresh } = useApiGet({ endpoint: `/restaurants/${id}`, defaultValue: mockStore })
+    const { data: store, error, loading, setLoading, refresh } = useApiGet({ endpoint: `/restaurants/${id}` })
     const { name, address, description, image, menus = [] } = store || {}
     const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
     const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
@@ -88,6 +89,9 @@ export default function StorePage() {
             setDeleting(false)
         }
     }
+    console.log(store)
+
+    if (!loading && !store) return (<Error404Page />)
     return (
         <Flex h='100%' w='80%' mx='auto' direction='column' align='center'>
             {loading ? <LoadingSpinner /> :
@@ -106,23 +110,24 @@ export default function StorePage() {
                                     <Text fontSize='xl'>{address}</Text>
                                     <Text fontSize='md'>{description}</Text>
                                 </Box>
-                                {isAdmin &&
-                                    <>
-                                        <Flex p={4}>
-                                            <Button onClick={onEditOpen} mr={2} size='sm' colorScheme='yellow' leftIcon={<Icon as={EditIcon} />}>Edit</Button>
-                                            <Button onClick={onDeleteOpen} size='sm' colorScheme='red' leftIcon={<Icon as={DeleteIcon} />}>Delete</Button>
-                                        </Flex>
-                                        <EditStoreModal refresh={refresh} store={store} onClose={onEditClose} isOpen={isEditOpen} />
-                                        <DeleteAlertDialog
-                                            isOpen={isDeleteOpen}
-                                            leastDestructiveRef={cancelDeleteRef}
-                                            onClose={onDeleteClose}
-                                            onDeleteClick={deleteStore}
-                                            isLoading={deleting}
-                                            header={`Delete ${name}?`}
-                                        />
-                                    </>
-                                }
+                                <Flex p={4}>
+                                    <Link to={`/stores/${id}/dashboard`}><Button colorScheme='messenger' mr={2} leftIcon={<Icon as={RiDashboardFill} />}>Dashboard</Button></Link>
+                                    {isAdmin &&
+                                        <>
+                                            <Button onClick={onEditOpen} mr={2} colorScheme='yellow' leftIcon={<Icon as={EditIcon} />}>Edit</Button>
+                                            <Button onClick={onDeleteOpen} colorScheme='red' leftIcon={<Icon as={DeleteIcon} />}>Delete</Button>
+                                            <EditStoreModal refresh={refresh} store={store} onClose={onEditClose} isOpen={isEditOpen} />
+                                            <DeleteAlertDialog
+                                                isOpen={isDeleteOpen}
+                                                leastDestructiveRef={cancelDeleteRef}
+                                                onClose={onDeleteClose}
+                                                onDeleteClick={deleteStore}
+                                                isLoading={deleting}
+                                                header={`Delete ${name}?`}
+                                            />
+                                        </>
+                                    }
+                                </Flex>
                             </GridItem>
                         </SimpleGrid>
                         <SimpleGrid columns={12} w='100%'>

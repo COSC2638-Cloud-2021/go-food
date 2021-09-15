@@ -72,15 +72,9 @@ const useCartsStore = create(persist(
       const orderLines = products.map(product => { return { product: { id: product.id }, quantity: product.quantity } })
       const body = { restaurant: { id: storeId }, contactName: name, phoneNumber, address, note, orderDate, orderLines }
       console.log(body)
-      try {
-        const res = await api.post('/accounts/me/orders', body)
-        console.log(res.data)
-        get().clearCart({ storeId })
-        return res.data
-      } catch (e) {
-        console.log(e.response)
-        return null
-      }
+      const res = await api.post('/accounts/me/orders', body)
+      console.log(res.data)
+      get().clearCart({ storeId })
     },
     clearCart: ({ storeId }) => {
       const updatedCarts = get().carts

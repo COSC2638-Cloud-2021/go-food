@@ -32,10 +32,8 @@ export default function Checkout() {
         if (submitting) return
         setSubmitting(true)
         try {
-            const data = await submitOrder({ storeId: Number(storeId), address, note, name, phoneNumber })
-            if (data) {
-                setOrderPlaced(true)
-            }
+            await submitOrder({ storeId: Number(storeId), address, note, name, phoneNumber })
+            setOrderPlaced(true)
         } catch (e) {
             errorToast({
                 title: 'Order failed!',

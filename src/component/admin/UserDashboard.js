@@ -1,7 +1,8 @@
-import { IconButton, Table, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
+import { IconButton, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Icon,Flex } from "@chakra-ui/react"
 import { useState } from "react"
 import { Container, Tab, Tabs } from "react-bootstrap"
 import { FaUserEdit } from "react-icons/fa"
+import { IoTrash } from "react-icons/io5"
 import { TiDelete } from "react-icons/ti"
 import api from "../../api/api"
 import useApiGet from "../../hook/useApiGet"
@@ -35,7 +36,7 @@ export default function UserDashboard() {
                     </Thead>
                     <Tbody>
                         {
-                            filteredAccounts.map((user) => (<UserRow key={user.id} refresh={refresh} user={user} onDelete={refresh} />))
+                            filteredAccounts.map((user) => (<UserRow key={user.id} refresh={refresh} user={user} />))
                         }
                     </Tbody>
                 </Table>
@@ -44,15 +45,20 @@ export default function UserDashboard() {
     )
 }
 
-function UserRow({ user, onDelete, refresh }) {
+function UserRow({ user, refresh }) {
     const { id, name, phoneNumber, address, email } = user
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [deleting, setDeleting] = useState(false)
+
     const deleteAccount = async () => {
+        setDeleting(true)
         try {
             const res = await api.delete(`/accounts/${id}`)
-            onDelete()
+            refresh()
         } catch (e) {
             console.log(e)
+        } finally {
+            setDeleting(false)
         }
     }
     return <Tr key={id} >
@@ -61,20 +67,25 @@ function UserRow({ user, onDelete, refresh }) {
         <Td>{email}</Td>
         <Td>{phoneNumber}</Td>
         <Td>{address}</Td>
-        <Td className='operation'>
-            <IconButton
-                onClick={onOpen}
-                isRound
-                variant='ghost'
-                icon={<FaUserEdit />}>
-            </IconButton>
-            <EditUserModal user={user} onClose={onClose} isOpen={isOpen} refresh={refresh} />
-            <IconButton
-                isRound
-                variant='ghost'
-                onClick={deleteAccount}
-                icon={<TiDelete />}>
-            </IconButton>
+        <Td>
+            <Flex justify='center' align='center'>
+                <IconButton
+                    onClick={onOpen}
+                    isRound
+                    colorScheme='yellow'
+                    variant='ghost'
+                    icon={<Icon as={FaUserEdit} boxSize={25} color='yellow.400' />}>
+                </IconButton>
+                <EditUserModal user={user} onClose={onClose} isOpen={isOpen} refresh={refresh} />
+                <IconButton
+                    isLoading={deleting}
+                    isRound
+                    colorScheme='red'
+                    variant='ghost'
+                    onClick={deleteAccount}
+                    icon={<Icon as={IoTrash} boxSize={25} color='red.400' />}>
+                </IconButton>
+            </Flex>
         </Td>
     </Tr>
 }

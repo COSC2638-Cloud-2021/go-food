@@ -1,19 +1,16 @@
-import { CheckIcon, EmailIcon, PhoneIcon } from '@chakra-ui/icons'
-import { Avatar, Box, Button, Flex, GridItem, Icon, Modal, ModalOverlay, SimpleGrid, Tab, TabList, Tabs, Text, useDisclosure, ModalContent, ModalHeader, ModalBody, ModalCloseButton, ModalFooter, Table, Thead, Tbody, Th, Tr, Td, Tfoot, FormControl, FormLabel, Input, useBoolean } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import { Fragment } from 'react'
+import { EmailIcon, PhoneIcon } from '@chakra-ui/icons'
+import { Avatar, Box, Button, Flex, FormControl, FormLabel, GridItem, Icon, Input, SimpleGrid, Text, useBoolean } from '@chakra-ui/react'
+import React, { Fragment, useState } from 'react'
 import { FaUserAlt } from 'react-icons/fa'
-import { BiTimeFive } from 'react-icons/bi'
 import { IoLocationOutline } from 'react-icons/io5'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 import api from '../../api/api'
 import useApiGet from '../../hook/useApiGet'
 import useInput from '../../hook/useInput'
-import mockOrders from '../../mock/mockOrders'
 import useAuthStore from '../../store/useAuthStore'
 import formatCurrency from '../../util/formatCurrency'
-import LoadingSpinner from '../shared/LoadingSpinner'
+import OrderList from '../order/OrderList'
 import { useErrorToast, useSuccessToast } from '../shared/toast'
 
 function UserEditForm({ onCancel }) {
@@ -122,138 +119,6 @@ function UserInfo() {
     )
 }
 
-
-function Info({ label, value }) {
-    return (
-        <Flex py={0.5}>
-            <Text fontWeight={600}>{label}</Text>
-            <Box ml='auto'>
-                <Text>{value}</Text>
-            </Box>
-        </Flex>)
-}
-
-
-function Order({ order }) {
-    const { id, contactName, address, phoneNumber, note, orderDate, status, orderLines, total } = order
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const isCompleted = status === 'COMPLETED'
-    const statusDisplay = status ?? 'pending'
-    return (
-        <Box border='1px' borderColor={isCompleted ? 'green.400' : 'yellow.400'} onClick={onOpen} cursor='pointer' boxShadow='sm' borderRadius='md' p={4}>
-            <Text fontSize='lg' fontWeight={600}>Order #{id}</Text>
-            <Text color='gray.600' fontSize='sm'>{new Date(orderDate).toISOString().substring(0, 10)}</Text>
-            <Flex my={1} align='center'>
-                {isCompleted ?
-                    <Icon color='green.400' as={CheckIcon} mr={2} /> :
-                    <Icon color='yellow.600' as={BiTimeFive} mr={2} />
-                }
-                <Text
-                    color={isCompleted ? 'green.400' : 'yellow.600'}
-                    textTransform='capitalize' fontSize='sm'
-                >
-                    {statusDisplay}
-                </Text>
-            </Flex>
-            <Text fontWeight={600} align='right'>{formatCurrency(total)}</Text>
-            <Modal size='3xl' preserveScrollBarGap closeOnOverlayClick isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent p={4}>
-                    <ModalHeader>
-                        <Text fontSize='xl' fontWeight={600}>Order #{id}</Text>
-                        <Text color='gray.600' fontSize='md'>{new Date(orderDate).toISOString().substring(0, 10)}</Text>
-                        <Flex my={1} align='center'>
-                            {isCompleted ?
-                                <Icon color='green.400' as={CheckIcon} mr={2} /> :
-                                <Icon color='yellow.600' as={BiTimeFive} mr={2} />
-                            }
-                            <Text
-                                color={isCompleted ? 'green.400' : 'yellow.600'}
-                                textTransform='capitalize' fontSize='md'
-                            >
-                                {statusDisplay}
-                            </Text>
-                        </Flex>
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Info label='Name' value={contactName} />
-                        <Info label='Address' value={address} />
-                        <Info label='Phone number' value={phoneNumber} />
-                        <Info label='Note' />
-                        <Text>{note}</Text>
-                        <Box height={10} />
-                        <Table variant='simple'>
-                            <Thead>
-                                <Tr>
-                                    <Th>Item</Th>
-                                    <Th isNumeric>Quantity</Th>
-                                    <Th isNumeric>Subtotal</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {orderLines.map(({ product, id, quantity, price }) => (
-                                    <Tr key={id}>
-                                        <Td>{product?.name}</Td>
-                                        <Td isNumeric>{quantity}</Td>
-                                        <Td isNumeric>{formatCurrency(quantity * price)}</Td>
-                                    </Tr>
-                                ))}
-                            </Tbody>
-                            <Tfoot>
-                                <Tr>
-                                    <Th fontSize='md' colSpan={2}>Total</Th>
-                                    <Th fontSize='md' isNumeric>{formatCurrency(total)}</Th>
-                                </Tr>
-                            </Tfoot>
-                        </Table>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-        </Box>
-    )
-}
-
-function OrderList() {
-    const [tabIndex, setTabIndex] = useState(0)
-    const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
-    const isCompleted = tabIndex === 1
-    const displayedOrders = isCompleted ?
-        orders.filter(order => order.status === 'COMPLETED')
-        : orders.filter(order => order.status !== 'COMPLETED')
-
-    return (
-        <Box p={4}>
-            <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Order history</Text>
-            <Tabs my={4} onChange={(index) => setTabIndex(index)} colorScheme={isCompleted ? 'green' : 'yellow'} size="md">
-                <TabList>
-                    <Tab _focus={{ boxShadow: 'none' }}>
-                        <Flex align='center'>
-                            <Icon as={BiTimeFive} mr={2} />
-                            <Text>In progress</Text>
-                        </Flex>
-                    </Tab>
-                    <Tab _focus={{ boxShadow: 'none' }}>
-                        <Flex align='center'>
-                            <Icon as={CheckIcon} mr={2} />
-                            <Text>Completed</Text>
-                        </Flex>
-                    </Tab>
-                </TabList>
-            </Tabs>
-            <SimpleGrid columns={12} spacing={3}>
-                {loading ? <LoadingSpinner /> :
-                    displayedOrders.map(order =>
-                        <GridItem key={order.id} colSpan={[12, 6, 4, 3]}>
-                            <Order order={order} />
-                        </GridItem>
-                    )}
-            </SimpleGrid>
-        </Box >
-
-    )
-}
-
 function Manage() {
     return (
         <Box p={4}>
@@ -278,6 +143,7 @@ function ManageItem({ icon, name, link }) {
 
 export default function ProfilePage() {
     const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
+    const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
     return (
         <Flex h='100%' direction='column' p={4}>
             <SimpleGrid columns={12} spacing={3}>
@@ -288,7 +154,10 @@ export default function ProfilePage() {
                 </GridItem>
                 <GridItem colSpan={[12, null, 7, 6]}>
                     {isAdmin && <Manage />}
-                    <OrderList />
+                    <Box p={4}>
+                        <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Order history</Text>
+                        <OrderList loading={loading} orders={orders} />
+                    </Box>
                 </GridItem>
                 <GridItem colSpan={[12, null, 1, 2]}>
                 </GridItem>

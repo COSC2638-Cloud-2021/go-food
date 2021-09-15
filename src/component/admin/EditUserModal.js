@@ -1,8 +1,7 @@
-import { Box, Button, Flex, FormControl, FormLabel, Image, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Textarea } from "@chakra-ui/react";
-import { useEffect, useMemo, useState } from "react";
+import { Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay } from "@chakra-ui/react";
+import { useState } from "react";
 import api from "../../api/api";
 import useInput from "../../hook/useInput";
-import isValidImageFile from '../../util/isValidImageFile';
 import { useErrorToast, useSuccessToast } from "../shared/toast";
 
 export default function EditUserModal({ user, isOpen, onClose, refresh }) {
