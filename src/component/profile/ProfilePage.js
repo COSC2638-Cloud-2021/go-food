@@ -120,7 +120,8 @@ function UserInfo() {
     )
 }
 
-function MyStores({ stores = [] }) {
+function MyStores() {
+    const stores = useAuthStore(s => s.restaurants)
     if (stores === undefined || stores.length == 0) return <> </>
     return (
         <Box p={4}>
@@ -156,7 +157,6 @@ function ManageItem({ icon, name, link }) {
 
 export default function ProfilePage() {
     const user = useAuthStore(s => s.user)
-    const { restaurants: stores = [] } = user
     const isAdmin = useAuthStore(s => s.isAdmin)()
     const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
     return (
@@ -169,7 +169,7 @@ export default function ProfilePage() {
                 </GridItem>
                 <GridItem colSpan={[12, null, 7, 6]}>
                     {isAdmin && <Manage />}
-                    <MyStores stores={stores} />
+                    <MyStores />
                     <Box p={4}>
                         <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Order history</Text>
                         <OrderList loading={loading} orders={orders} />

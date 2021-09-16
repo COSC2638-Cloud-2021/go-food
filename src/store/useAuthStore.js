@@ -5,6 +5,7 @@ import api from '../api/api'
 const useAuthStore = create(persist(
   (set, get) => ({
     user: null,
+    restaurants: [],
     login: async ({ email, password }) => {
       try {
         const loginRes = await api.post('/auth/login', { email, password })
@@ -24,18 +25,20 @@ const useAuthStore = create(persist(
       }
     },
     isOwner: (id) => {
-      const { restaurants: stores = [] } = get().user || {}
+      const { restaurants: stores } = get()
       return stores.findIndex(store => String(store.id) === String(id)) !== -1
     },
     isAdmin: () => {
-      const user = get().user || {}
+      const { user } = get() || {}
       return user?.role === 'admin'
     },
     fetchCurrentUser: async () => {
       try {
         const res = await api.get('accounts/me')
         const user = res.data
-        set({ user })
+        const restaurantRes = await api.get('accounts/me/restaurants')
+        const restaurants = restaurantRes.data
+        set({ user, restaurants })
         return get().user
       } catch (e) {
         console.log(e.response)
@@ -45,7 +48,7 @@ const useAuthStore = create(persist(
     },
     clearUser: () => {
       console.log('Clear user!')
-      set({ user: null })
+      set({ user: null, restaurants: [] })
     },
   }),
   {
