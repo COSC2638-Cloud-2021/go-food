@@ -67,7 +67,8 @@ const useCartsStore = create(persist(
       })
       return total
     },
-    submitOrder: async ({ storeId, address, note, name, phoneNumber, orderDate = '2021-08-08', }) => {
+    submitOrder: async ({ storeId, address, note, name, phoneNumber }) => {
+      const orderDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-')
       const products = getArrayEntries(get().carts[storeId].products)
       const orderLines = products.map(product => { return { product: { id: product.id }, quantity: product.quantity } })
       const body = { restaurant: { id: storeId }, contactName: name, phoneNumber, address, note, orderDate, orderLines }

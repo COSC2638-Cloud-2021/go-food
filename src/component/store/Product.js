@@ -1,9 +1,8 @@
 import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Flex, IconButton, Image, useDisclosure, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Image, Text, useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import api from "../../api/api";
 import images from "../../asset/image/images";
-import mockProductImage from "../../mock/mockProductImage";
 import useAuthStore from "../../store/useAuthStore";
 import useCartsStore from "../../store/useCartsStore";
 import formatCurrency from "../../util/formatCurrency";
