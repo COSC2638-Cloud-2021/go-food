@@ -9,7 +9,6 @@ import api from "../../api/api"
 import logo from '../../asset/image/logo.png'
 import useApiGet from "../../hook/useApiGet"
 import useInput from "../../hook/useInput"
-import mockStore from "../../mock/mockStore"
 import useAuthStore from "../../store/useAuthStore"
 import EditStoreModal from "../admin/EditStoreModal"
 import Cart from "../cart/Cart"
@@ -72,6 +71,7 @@ export default function StorePage() {
     const history = useHistory()
     const cancelDeleteRef = useRef()
     const user = useAuthStore(s => s.user)
+    const isOwner = useAuthStore(s => s.isOwner)(id)
     const isAdmin = user?.role === 'admin'
     const errorToast = useErrorToast()
 
@@ -111,7 +111,10 @@ export default function StorePage() {
                                     <Text fontSize='md'>{description}</Text>
                                 </Box>
                                 <Flex p={4}>
-                                    <Link to={`/stores/${id}/dashboard`}><Button colorScheme='messenger' mr={2} leftIcon={<Icon as={RiDashboardFill} />}>Dashboard</Button></Link>
+                                    {
+                                        (isOwner || isAdmin) &&
+                                        <Link to={`/stores/${id}/dashboard`}><Button colorScheme='messenger' mr={2} leftIcon={<Icon as={RiDashboardFill} />}>Dashboard</Button></Link>
+                                    }
                                     {isAdmin &&
                                         <>
                                             <Button onClick={onEditOpen} mr={2} colorScheme='yellow' leftIcon={<Icon as={EditIcon} />}>Edit</Button>

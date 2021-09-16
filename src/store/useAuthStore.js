@@ -23,6 +23,14 @@ const useAuthStore = create(persist(
         console.log(e.response)
       }
     },
+    isOwner: (id) => {
+      const { restaurants: stores = [] } = get().user || {}
+      return stores.findIndex(store => String(store.id) === String(id)) !== -1
+    },
+    isAdmin: () => {
+      const user = get().user || {}
+      return user?.role === 'admin'
+    },
     fetchCurrentUser: async () => {
       try {
         const res = await api.get('accounts/me')

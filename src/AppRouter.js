@@ -15,7 +15,7 @@ import useAuthStore from "./store/useAuthStore"
 
 export default function AppRouter() {
     const user = useAuthStore(s => s.user)
-    const isAdmin = user?.role === 'admin'
+    const isAdmin = useAuthStore(s => s.isAdmin)()
     return (
         <BrowserRouter>
             <Box height='100%' display='flex' flexDirection='column'>

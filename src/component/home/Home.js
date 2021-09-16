@@ -1,14 +1,14 @@
-import { EmailIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Icon, IconButton, Image, Input, SimpleGrid, Text, useDisclosure, Divider } from '@chakra-ui/react';
+import { EmailIcon, PhoneIcon } from '@chakra-ui/icons';
+import { Box, Button, Divider, Flex, Icon, IconButton, Input, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import { FaFacebook, FaInstagramSquare, FaPinterest, FaTwitter } from "react-icons/fa";
-import { Link } from 'react-router-dom';
 import images from '../../asset/image/images';
 import useApiGet from '../../hook/useApiGet';
 import useQuery from '../../hook/useQuery';
 import useAuthStore from '../../store/useAuthStore';
 import AddStoreModal from '../admin/AddStoreModal';
 import LoadingSpinner from '../shared/LoadingSpinner';
+import StoreCard from './StoreCard';
 
 
 export default function Home() {
@@ -22,15 +22,15 @@ export default function Home() {
     return (
         <Box h='100%'>
             <Helmet title='GoFood' />
-            <Box bgImage={images.home.banner} width='100%' height={600} backgroundSize='cover' backgroundRepeat='no-repeat' backgroundPosition='center'>
-                <Flex flexDirection='column' align='center' justify='center' width='100%' height='100%' bgColor='blackAlpha.700'>
-                    <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='yellow.400' textShadow=''>GoFood</Text>
-                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600}>Go order your food</Text>
+            <Box bgImage={images.home.banner2} width='100%' height={600} backgroundSize='cover' backgroundRepeat='no-repeat' backgroundPosition='center'>
+                <Flex flexDirection='column' align='center' justify='center' width='100%' height='100%' bgColor='blackAlpha.800'>
+                    <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='white' textShadow='2px 2px #000000'>GoFood</Text>
+                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600} textShadow='2px 2px #000000'>Go order your food</Text>
                     <form>
                         <Flex align='center' justify='center'>
-                            <Input defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={6} w={[300, 400, 500, 600]} borderRadius='3xl'
+                            <Input boxShadow='lg' defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={6} w={[300, 400, 500, 600]} borderRadius='3xl'
                                 bgColor='white' variant='outlined' placeholder='Search for restaurants by name, address...' />
-                            <Button borderRadius='3xl' fontSize='lg' colorScheme='yellow' p={6} type='submit'>Search</Button>
+                            <Button boxShadow='lg' borderRadius='3xl' fontSize='lg' colorScheme='yellow' p={6} type='submit'>Search</Button>
                         </Flex>
                     </form>
 
@@ -41,22 +41,8 @@ export default function Home() {
                 {
                     loading ? <LoadingSpinner /> :
                         <SimpleGrid spacing={5} columns={[1, 2, 3, 4]} >
-                            {filteredRestaurant.map(({ id, name, address, image }) => (
-                                <Box key={id} borderRadius='2xl' boxShadow='lg'  >
-                                    <Link to={`stores/${id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
-                                        <Image src={image ?? images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='2xl' />
-                                        <Box mt={2} px={4} pb={2} w='100%' overflow='hidden'>
-                                            <Flex>
-                                                <Text maxW='sm' isTruncated fontWeight={600} fontSize='xl' textOverflow='ellipsis' >{name}</Text>
-                                                <Flex px={2} ml='auto' align='center' justify='center' borderRadius='xl' bgColor='green.500' color='white'>
-                                                    <Text fontSize='sm' fontWeight={600} mr={1}>5.0</Text>
-                                                    <Icon boxSize='3' as={StarIcon}></Icon>
-                                                </Flex>
-                                            </Flex>
-                                            <Text maxW='100%' isTruncated fontSize='sm' >{address}</Text>
-                                        </Box>
-                                    </Link>
-                                </Box>
+                            {filteredRestaurant.map(store => (
+                                <StoreCard key={store.id} store={store} />
                             ))}
                         </SimpleGrid >
                 }

@@ -1,8 +1,10 @@
 import { CheckIcon } from '@chakra-ui/icons'
-import { Box, Flex, Icon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Flex, Icon, Modal, ModalBody, Button, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
+import React, { useState } from 'react'
 import { BiTimeFive } from 'react-icons/bi'
+import api from '../../api/api'
 import formatCurrency from '../../util/formatCurrency'
+import { useErrorToast, useSuccessToast } from '../shared/toast'
 function Info({ label, value }) {
     return (
         <Flex py={0.5}>
@@ -13,11 +15,28 @@ function Info({ label, value }) {
         </Flex>)
 }
 
-export default function Order({ order }) {
+export default function Order({ order, canBeUpdated = false, refresh }) {
     const { id, contactName, address, phoneNumber, note, orderDate, status, orderLines, total } = order
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const isCompleted = status === 'COMPLETED'
+    const isCompleted = status === 'completed'
     const statusDisplay = status ?? 'pending'
+    const successToast = useSuccessToast()
+    const errorToast = useErrorToast()
+    const [completingOrder, setCompletingOrder] = useState(false)
+
+    async function completeOrder() {
+        setCompletingOrder(true)
+        try {
+            await api.patch(`/orders/${id}`, { status: 'completed' })
+            successToast({ title: `Complete order #${id} successfully!` })
+            refresh?.()
+        } catch (e) {
+            errorToast({ title: `Complete order #${id} failed!`, description: e.response?.data?.message })
+        } finally {
+            setCompletingOrder(false)
+        }
+    }
+
     return (
         <Box border='1px' borderColor={isCompleted ? 'green.400' : 'yellow.400'} onClick={onOpen} cursor='pointer' boxShadow='sm' borderRadius='md' p={4}>
             <Text fontSize='lg' fontWeight={600}>Order #{id}</Text>
@@ -52,6 +71,14 @@ export default function Order({ order }) {
                             >
                                 {statusDisplay}
                             </Text>
+                            {canBeUpdated && !isCompleted &&
+                                <Button _focus={{ boxShadow: 'none' }}
+                                    isLoading={completingOrder}
+                                    onClick={completeOrder}
+                                    ml='auto' colorScheme='green' borderRadius='3xl' size='sm'>
+                                    Complete Order
+                                </Button>
+                            }
                         </Flex>
                     </ModalHeader>
                     <ModalCloseButton />

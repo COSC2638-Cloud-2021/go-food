@@ -12,7 +12,7 @@ import OrderList from '../order/OrderList'
 import LoadingSpinner from '../shared/LoadingSpinner'
 import { useErrorToast, useSuccessToast } from '../shared/toast'
 import AddRequestModal from './AddRequestModal'
-
+import Error404Page from '../shared/Error404Page'
 
 function OwnerRow({ user, refresh, isAdmin, restaurantId }) {
     const { id, name, email } = user
@@ -65,7 +65,7 @@ function OwnerList({ owners, refresh, isAdmin, loading, restaurantId }) {
         e.preventDefault()
         setSubmitting(true)
         try {
-            await api.post(`/restaurants/${restaurantId}/owners`, email)
+            await api.post(`/restaurants/${restaurantId}/owners`, { email })
             successToast({ title: "Add owner successfully" })
             refresh()
         } catch (e) {
@@ -77,15 +77,19 @@ function OwnerList({ owners, refresh, isAdmin, loading, restaurantId }) {
     }
     return (
         <Box>
-            <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Owners</Text>
-            <form onSubmit={handleOwnerSubmit}>
-                <Flex my={2}>
-                    <Input onInput={onEmailInput} value={email} mr={2} placeholder='Enter user email' type='email' required />
-                    <Button isLoading={submitting} type='submit' colorScheme='green'>Add owner</Button>
-                </Flex>
-            </form>
+            <Text fontWeight={700} fontSize='2xl' textTransform='uppercase' mb={2}>Owners</Text>
+            {
+                isAdmin &&
+                <form onSubmit={handleOwnerSubmit}>
+                    <Flex my={2}>
+                        <Input onInput={onEmailInput} value={email} mr={2} placeholder='Enter user email' type='email' required />
+                        <Button isLoading={submitting} type='submit' colorScheme='green'>Add owner</Button>
+                    </Flex>
+                </form>
+            }
+
             {loading ? <LoadingSpinner /> :
-                <Table w='100%'>
+                <Table  w='100%'>
                     <Thead>
                         <tr>
                             <Th>ID</Th>
@@ -239,11 +243,12 @@ function RequestList({ requests, refresh, isAdmin, loading, restaurantId }) {
 }
 
 export default function StoreDashboard() {
-    const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
     const { id } = useParams()
+    const isAdmin = useAuthStore(s => s.isAdmin)()
+    const isOwner = useAuthStore(s => s.isOwner)(id)
     const { data: restaurant, loading, refresh } = useApiGet({ endpoint: `/restaurants/${id}/dashboard`, defaultValue: null })
     const { owners = [], requests = [], orders = [] } = restaurant || {}
-
+    if (!(isAdmin || isOwner)) return <Error404Page />
     return (
         <Flex h='100%' direction='column' p={4}>
             <SimpleGrid columns={12} spacing={3}>
@@ -258,7 +263,7 @@ export default function StoreDashboard() {
                 <GridItem colSpan={[12, null, null, 6]}>
                     <Box p={4}>
                         <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Orders</Text>
-                        <OrderList loading={loading} orders={orders} />
+                        <OrderList loading={loading} orders={orders} refresh={refresh} canBeUpdated />
                     </Box>
                 </GridItem>
 

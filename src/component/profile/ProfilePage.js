@@ -10,6 +10,7 @@ import useApiGet from '../../hook/useApiGet'
 import useInput from '../../hook/useInput'
 import useAuthStore from '../../store/useAuthStore'
 import formatCurrency from '../../util/formatCurrency'
+import StoreCard from '../home/StoreCard'
 import OrderList from '../order/OrderList'
 import { useErrorToast, useSuccessToast } from '../shared/toast'
 
@@ -119,6 +120,18 @@ function UserInfo() {
     )
 }
 
+function MyStores({ stores = [] }) {
+    if (stores === undefined || stores.length == 0) return <> </>
+    return (
+        <Box p={4}>
+            <Text mb={4} fontWeight={700} fontSize='2xl' textTransform='uppercase'>My Stores</Text>
+            <SimpleGrid columns={[1, null, 2, 3]} spacing={3}>
+                {stores.map(store => <StoreCard store={store} key={store.id} />)}
+            </SimpleGrid>
+        </Box>
+    )
+}
+
 function Manage() {
     return (
         <Box p={4}>
@@ -142,7 +155,9 @@ function ManageItem({ icon, name, link }) {
 }
 
 export default function ProfilePage() {
-    const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
+    const user = useAuthStore(s => s.user)
+    const { restaurants: stores = [] } = user
+    const isAdmin = useAuthStore(s => s.isAdmin)()
     const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
     return (
         <Flex h='100%' direction='column' p={4}>
@@ -154,6 +169,7 @@ export default function ProfilePage() {
                 </GridItem>
                 <GridItem colSpan={[12, null, 7, 6]}>
                     {isAdmin && <Manage />}
+                    <MyStores stores={stores} />
                     <Box p={4}>
                         <Text fontWeight={700} fontSize='2xl' textTransform='uppercase'>Order history</Text>
                         <OrderList loading={loading} orders={orders} />

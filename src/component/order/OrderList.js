@@ -5,7 +5,7 @@ import { BiTimeFive } from 'react-icons/bi'
 import LoadingSpinner from '../shared/LoadingSpinner'
 import Order from './Order'
 
-export default function OrderList({ orders, loading }) {
+export default function OrderList({ orders, loading, refresh, canBeUpdated }) {
     const [tabIndex, setTabIndex] = useState(0)
     const isCompleted = tabIndex === 1
     const displayedOrders = isCompleted ?
@@ -34,7 +34,7 @@ export default function OrderList({ orders, loading }) {
                 {loading ? <LoadingSpinner /> :
                     displayedOrders.map(order =>
                         <GridItem key={order.id} colSpan={[12, 6, 4, 3]}>
-                            <Order order={order} />
+                            <Order order={order} refresh={refresh} canBeUpdated={canBeUpdated} />
                         </GridItem>
                     )}
             </SimpleGrid>
