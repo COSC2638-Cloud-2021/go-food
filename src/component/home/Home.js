@@ -1,16 +1,15 @@
-import { StarIcon } from '@chakra-ui/icons';
-import { Box, Flex, Icon, SimpleGrid, Text, Input, Button, useDisclosure, Image } from '@chakra-ui/react';
-import {
-    Badge
-} from "react-bootstrap";
+import { EmailIcon, PhoneIcon, StarIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Icon, IconButton, Image, Input, SimpleGrid, Text, useDisclosure, Divider } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
+import { FaFacebook, FaInstagramSquare, FaPinterest, FaTwitter } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import images from '../../asset/image/images';
 import useApiGet from '../../hook/useApiGet';
 import useQuery from '../../hook/useQuery';
 import useAuthStore from '../../store/useAuthStore';
+import AddStoreModal from '../admin/AddStoreModal';
 import LoadingSpinner from '../shared/LoadingSpinner';
-import AddStoreModal from '../admin/AddStoreModal'
+
 
 export default function Home() {
     const query = useQuery()
@@ -22,22 +21,22 @@ export default function Home() {
 
     return (
         <Box h='100%'>
+            <Helmet title='GoFood' />
             <Box bgImage={images.home.banner} width='100%' height={600} backgroundSize='cover' backgroundRepeat='no-repeat' backgroundPosition='center'>
                 <Flex flexDirection='column' align='center' justify='center' width='100%' height='100%' bgColor='blackAlpha.700'>
-                    <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='white'>GoFood</Text>
-                    <Text mb={8} color='white' fontSize='2xl'>Go order your food</Text>
+                    <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='yellow.400' textShadow=''>GoFood</Text>
+                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600}>Go order your food</Text>
                     <form>
                         <Flex align='center' justify='center'>
-                            <Input defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={7} w={[300, 400, 500, 600]} borderRadius='xl'
+                            <Input defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={6} w={[300, 400, 500, 600]} borderRadius='3xl'
                                 bgColor='white' variant='outlined' placeholder='Search for restaurants by name, address...' />
-                            <Button fontSize='lg' colorScheme='yellow' p={7} type='submit'>Search</Button>
+                            <Button borderRadius='3xl' fontSize='lg' colorScheme='yellow' p={6} type='submit'>Search</Button>
                         </Flex>
                     </form>
 
                 </Flex>
             </Box>
             <Box minH='75%' mt={2} mx='auto' w={['100%', null, '90%', '80%']}>
-                <Helmet title='GoFood' />
                 <FilterItems refresh={refresh} />
                 {
                     loading ? <LoadingSpinner /> :
@@ -62,6 +61,7 @@ export default function Home() {
                         </SimpleGrid >
                 }
             </Box>
+            <Footer />
         </Box>
 
     )
@@ -82,5 +82,52 @@ function FilterItems({ refresh }) {
                 </>
             }
         </Flex>
+    )
+}
+
+function Footer() {
+    return (
+        <Box mt={4} py={12} px={4} bgColor='#222222'>
+            <Flex align='center' justify='center'>
+                <IconButton
+                    isRound
+                    mr={4}
+                    colorScheme='yellow'
+                    _focus={{ boxShadow: 'none' }}
+                    icon={<Icon as={FaFacebook} />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    mr={4}
+                    colorScheme='yellow'
+                    _focus={{ boxShadow: 'none' }}
+                    icon={<Icon as={FaPinterest} />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    mr={4}
+                    colorScheme='yellow'
+                    _focus={{ boxShadow: 'none' }}
+                    icon={<Icon as={FaInstagramSquare} />}>
+                </IconButton>
+                <IconButton
+                    isRound
+                    colorScheme='yellow'
+                    _focus={{ boxShadow: 'none' }}
+                    icon={<Icon as={FaTwitter} />}>
+                </IconButton>
+            </Flex>
+            <Flex mt={4} direction='column' align='center' color='white'>
+                <Text mb={2} fontWeight={600} fontSize='xl'>Contact us</Text>
+                <Flex align='center' height={25}>
+                    <Icon as={PhoneIcon} />
+                    <Text mx={2}>+84 90 123 4567</Text>
+                    <Divider orientation='vertical' size='lg' />
+                    <Icon ml={2} as={EmailIcon} />
+                    <Text mx={2}>support@gofood.com</Text>
+                </Flex>
+            </Flex>
+
+        </Box>
     )
 }
