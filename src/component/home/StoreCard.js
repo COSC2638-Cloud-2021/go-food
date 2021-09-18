@@ -9,7 +9,7 @@ export default function StoreCard({ store }) {
     return (
         <Box borderRadius='2xl' boxShadow='lg'  >
             <Link to={`stores/${id}`} style={{ color: 'inherit', textDecoration: 'inherit' }}>
-                <Image src={image ?? images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='2xl' />
+                <Image src={image} fallbackSrc={images.logo} bgPosition='center' bgSize='cover' height={160} width='100%' objectFit='cover' borderRadius='2xl' />
                 <Box mt={2} px={4} pb={2} w='100%' overflow='hidden'>
                     <Flex>
                         <Text maxW='sm' isTruncated fontWeight={600} fontSize='xl' textOverflow='ellipsis' >{name}</Text>

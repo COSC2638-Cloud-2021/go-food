@@ -10,7 +10,6 @@ import formatCurrency from '../../util/formatCurrency';
 import getArrayEntries from '../../util/getArrayEntries';
 import { useErrorToast } from '../shared/toast';
 import { Link } from 'react-router-dom'
-import './Checkout.css';
 
 
 export default function Checkout() {

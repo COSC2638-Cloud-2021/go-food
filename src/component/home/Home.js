@@ -25,7 +25,7 @@ export default function Home() {
             <Box bgImage={images.home.banner2} width='100%' height={600} backgroundSize='cover' backgroundRepeat='no-repeat' backgroundPosition='center'>
                 <Flex flexDirection='column' align='center' justify='center' width='100%' height='100%' bgColor='blackAlpha.800'>
                     <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='white' textShadow='2px 2px #000000'>GoFood</Text>
-                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600} textShadow='2px 2px #000000'>Go order your food</Text>
+                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600} textShadow='2px 2px #000000'>The Leading Food Delivery Platform for Small Businesses</Text>
                     <form>
                         <Flex align='center' justify='center'>
                             <Input boxShadow='lg' defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={6} w={[300, 400, 500, 600]} borderRadius='3xl'
@@ -58,9 +58,6 @@ function FilterItems({ refresh }) {
     const isAdmin = useAuthStore(s => s.user)?.role === 'admin'
     return (
         <Flex my={4}>
-            <Button colorScheme='yellow' mr={2}>Filter</Button>
-            <Button colorScheme='yellow' mr={2}>Rating</Button>
-            <Button colorScheme='yellow' >Great offer</Button>
             {isAdmin &&
                 <>
                     <Button onClick={onOpen} ml='auto' colorScheme='green'>Add store</Button>

@@ -13,6 +13,7 @@ import LoadingSpinner from '../shared/LoadingSpinner'
 import { useErrorToast, useSuccessToast } from '../shared/toast'
 import AddRequestModal from './AddRequestModal'
 import Error404Page from '../shared/Error404Page'
+import { Helmet } from 'react-helmet-async'
 
 function OwnerRow({ user, refresh, isAdmin, restaurantId }) {
     const { id, name, email } = user
@@ -89,7 +90,7 @@ function OwnerList({ owners, refresh, isAdmin, loading, restaurantId }) {
             }
 
             {loading ? <LoadingSpinner /> :
-                <Table  w='100%'>
+                <Table w='100%'>
                     <Thead>
                         <tr>
                             <Th>ID</Th>
@@ -251,6 +252,7 @@ export default function StoreDashboard() {
     if (!(isAdmin || isOwner)) return <Error404Page />
     return (
         <Flex h='100%' direction='column' p={4}>
+            <Helmet title='Dashboard' />
             <SimpleGrid columns={12} spacing={3}>
 
                 <GridItem colSpan={[12, null, null, 6]}>

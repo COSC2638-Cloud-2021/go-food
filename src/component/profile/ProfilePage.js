@@ -1,6 +1,7 @@
 import { EmailIcon, PhoneIcon } from '@chakra-ui/icons'
 import { Avatar, Box, Button, Flex, FormControl, FormLabel, GridItem, Icon, Input, SimpleGrid, Text, useBoolean } from '@chakra-ui/react'
 import React, { Fragment, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { FaUserAlt } from 'react-icons/fa'
 import { IoLocationOutline } from 'react-icons/io5'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
@@ -161,6 +162,7 @@ export default function ProfilePage() {
     const { data: orders, loading } = useApiGet({ endpoint: '/accounts/me/orders', defaultValue: [] })
     return (
         <Flex h='100%' direction='column' p={4}>
+            <Helmet title='Profile' />
             <SimpleGrid columns={12} spacing={3}>
                 <GridItem colSpan={[12, null, 1, 2]}>
                 </GridItem>

@@ -1,6 +1,6 @@
-import { IconButton, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Icon,Flex } from "@chakra-ui/react"
+import { IconButton, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, Icon, Flex, Box, Tabs, TabList, Tab, Text } from "@chakra-ui/react"
 import { useState } from "react"
-import { Container, Tab, Tabs } from "react-bootstrap"
+import { Helmet } from "react-helmet-async"
 import { FaUserEdit } from "react-icons/fa"
 import { IoTrash } from "react-icons/io5"
 import { TiDelete } from "react-icons/ti"
@@ -15,12 +15,21 @@ export default function UserDashboard() {
     const filteredAccounts = accounts.filter(a => (!a.role && filter === 'user') || a.role === filter)
 
     return (
-        <Container className="mt-4">
-            <Tabs onSelect={k => setFilter(k)} defaultActiveKey="member" id="uncontrolled-tab-example" className="mb-3">
-                <Tab eventKey="user" title="User">
-                </Tab>
-                <Tab eventKey="admin" title="Admin">
-                </Tab>
+        <Box p={4}>
+            <Helmet title='Users' />
+            <Tabs my={4} onChange={(index) => setFilter(index === 0 ? 'user' : 'admin')} size="md">
+                <TabList>
+                    <Tab _focus={{ boxShadow: 'none' }}>
+                        <Flex align='center'>
+                            <Text>User</Text>
+                        </Flex>
+                    </Tab>
+                    <Tab _focus={{ boxShadow: 'none' }}>
+                        <Flex align='center'>
+                            <Text>Admin</Text>
+                        </Flex>
+                    </Tab>
+                </TabList>
             </Tabs>
             {loading ? <LoadingSpinner /> :
                 <Table id='account'>
@@ -31,7 +40,7 @@ export default function UserDashboard() {
                             <Th>Email</Th>
                             <Th>Phone number</Th>
                             <Th>Address</Th>
-                            <Th>Operation</Th>
+                            <Th textAlign='center'>Operation</Th>
                         </tr>
                     </Thead>
                     <Tbody>
@@ -41,7 +50,7 @@ export default function UserDashboard() {
                     </Tbody>
                 </Table>
             }
-        </Container>
+        </Box>
     )
 }
 
@@ -74,7 +83,7 @@ function UserRow({ user, refresh }) {
                     isRound
                     colorScheme='yellow'
                     variant='ghost'
-                    icon={<Icon as={FaUserEdit} boxSize={25} color='yellow.400' />}>
+                    icon={<Icon as={FaUserEdit} boxSize='20px' color='yellow.400' />}>
                 </IconButton>
                 <EditUserModal user={user} onClose={onClose} isOpen={isOpen} refresh={refresh} />
                 <IconButton
@@ -83,7 +92,7 @@ function UserRow({ user, refresh }) {
                     colorScheme='red'
                     variant='ghost'
                     onClick={deleteAccount}
-                    icon={<Icon as={IoTrash} boxSize={25} color='red.400' />}>
+                    icon={<Icon as={IoTrash} boxSize='20px' color='red.400' />}>
                 </IconButton>
             </Flex>
         </Td>
