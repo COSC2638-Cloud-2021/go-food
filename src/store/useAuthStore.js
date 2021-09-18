@@ -9,11 +9,13 @@ const useAuthStore = create(persist(
     login: async ({ email, password }) => {
       try {
         const loginRes = await api.post('/auth/login', { email, password })
-        const accessToken = loginRes.data.accessToken
-        if (!accessToken) return
+        const accessToken = loginRes.data
+        localStorage.setItem('token', accessToken)
+        return accessToken
       }
       catch (e) {
         console.log(e.response)
+        return null
       }
     },
     logout: async () => {
@@ -34,6 +36,8 @@ const useAuthStore = create(persist(
     },
     fetchCurrentUser: async () => {
       try {
+        const token = localStorage.getItem('token')
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`
         const res = await api.get('accounts/me')
         const user = res.data
         const restaurantRes = await api.get('accounts/me/restaurants')
@@ -46,8 +50,10 @@ const useAuthStore = create(persist(
         return null
       }
     },
-    clearUser: () => {
+    clearUser: async () => {
       console.log('Clear user!')
+      api.defaults.headers.common['Authorization'] = ``
+      localStorage.setItem('token', '')
       set({ user: null, restaurants: [] })
     },
   }),

@@ -18,16 +18,26 @@ export default function LoginPage() {
     const onFormSubmit = async (e) => {
         e.preventDefault()
         setSubmittingLogin(true)
-        await login({ email, password })
-        const user = await fetchCurrentUser()
-        setSubmittingLogin(false)
-        if (!user) {
+        const token = await login({ email, password })
+        if (!token) {
             errorToast({
-                title: 'Login failed!',
+                title: 'Login failed',
                 description: 'Email and password do not match.',
             })
+            setSubmittingLogin(false)
             return
         }
+        const user = await fetchCurrentUser()
+        if (!user) {
+            errorToast({
+                title: 'Fetch error',
+                description: 'Cannot fetch login user.',
+            })
+            setSubmittingLogin(false)
+            return
+        }
+        setSubmittingLogin(false)
+
     }
 
     return (
