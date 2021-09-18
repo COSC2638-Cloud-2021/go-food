@@ -24,8 +24,8 @@ export default function Home() {
             <Helmet title='GoFood' />
             <Box bgImage={images.home.banner2} width='100%' height={600} backgroundSize='cover' backgroundRepeat='no-repeat' backgroundPosition='center'>
                 <Flex flexDirection='column' align='center' justify='center' width='100%' height='100%' bgColor='blackAlpha.800'>
-                    <Text lineHeight='100%' fontFamily='fantasy' fontSize='9xl' color='white' textShadow='2px 2px #000000'>GoFood</Text>
-                    <Text mb={8} color='white' fontSize='2xl' color='white' fontWeight={600} textShadow='2px 2px #000000'>The Leading Food Delivery Platform for Small Businesses</Text>
+                    <Text lineHeight='100%' textAlign='center' fontFamily='fantasy' fontSize='9xl' color='white' textShadow='2px 2px #000000'>GoFood</Text>
+                    <Text mb={8} textAlign='center' color='white' fontSize='2xl' color='white' fontWeight={600} textShadow='2px 2px #000000'>The Leading Food Delivery Platform for Small Businesses</Text>
                     <form>
                         <Flex align='center' justify='center'>
                             <Input boxShadow='lg' defaultValue={searchTerm} name='q' fontSize='lg' mr={2} p={6} w={[300, 400, 500, 600]} borderRadius='3xl'

@@ -75,7 +75,7 @@ export default function SignUpPage() {
                         <Input type='password' value={confirmPassword} onInput={onConfirmPasswordInput} required />
                     </FormControl>
                     <Box height={5}></Box>
-                    <Button type="submit" width='100%' colorScheme='yellow'>Sign Up</Button>
+                    <Button isLoading={submitting} type="submit" width='100%' colorScheme='yellow'>Sign Up</Button>
                 </form>
             </Box>
             <Box height={5}></Box>
